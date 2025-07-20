@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import logo from "../assets/logo.png";
 
+//registering logic using supabase
 export default function Register() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
+    first_name: "",
+    last_name: "",
     terms: false,
   });
   const [error, setError] = useState("");
@@ -32,16 +36,40 @@ export default function Register() {
       return setError("You must accept the terms and conditions");
     }
 
-    const { error } = await supabase.auth.signUp({
+    if (!formData.first_name || !formData.last_name) {
+      return setError("Please enter your full name.");
+    }
+
+    const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
     });
 
     if (error) {
-      setError(error.message);
-    } else {
-      navigate("/login");
+      return setError(error.message);
     }
+
+    const userId = data?.user?.id;
+    if (!userId) {
+      return setError("Failed to get user ID after registration.");
+    }
+
+    // insert into profiles table after registration
+    const { error: insertError } = await supabase.from("profiles").insert([
+      {
+        id: data.user.id,
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+      },
+    ]);
+    // if there's an error inserting into profiles
+    if (insertError) {
+      return setError(insertError.message);
+    }
+
+    // redirect to login page after successful registration
+    navigate("/login");
   };
 
   return (
@@ -59,6 +87,40 @@ export default function Register() {
             </p>
           )}
 
+          <div>
+            <label
+              htmlFor="firstName"
+              className="flex mb-1 text-sm font-medium text-gray-700"
+            >
+              First Name
+            </label>
+            <input
+              placeholder="Enter your first name"
+              type="text"
+              name="first_name"
+              id="firstName"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="lastName"
+              className="flex mb-1 text-sm font-medium text-gray-700"
+            >
+              Last Name
+            </label>
+            <input
+              placeholder="Enter your last name"
+              type="text"
+              name="last_name"
+              id="lastName"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
           <div>
             <label
               htmlFor="email"
@@ -125,7 +187,7 @@ export default function Register() {
             />
             <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
               I accept the{" "}
-              <a href="#" className="text-blue-600 hover:underline font-medium">
+              <a href="#" className="text-gray-600 hover:underline font-medium">
                 Terms & Conditions
               </a>
             </label>
@@ -142,10 +204,7 @@ export default function Register() {
 
         <p className="text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <a
-            href="/login"
-            className="text-blue-600 hover:underline font-medium"
-          >
+          <a href="/login" className="text-black hover:underline font-bold">
             Login here
           </a>
         </p>

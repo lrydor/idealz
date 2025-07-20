@@ -67,7 +67,7 @@ export default function Login() {
           Don’t have an account?{" "}
           <a
             href="/register"
-            className="text-blue-600 hover:underline font-medium"
+            className="text-black hover:underline font-bold"
           >
             Register
           </a>

@@ -8,6 +8,9 @@ export default function Hero() {
         <p className="text-lg text-gray-600">
           Get your frozen treat fix — sweet, fruity, creamy and cold!
         </p>
+        <div className="text-lg mt-4">
+          <h1>Take a look at our amazing flavors</h1>
+        </div>
       </div>
     </section>
   )
