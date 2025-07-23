@@ -16,7 +16,7 @@ const About = () => {
         </p>
 
         <p className="text-gray-600">
-          Whether it’s <span className="font-medium text-yellow-600">Mango</span>, <span className="font-medium text-pink-600">Picafresa</span>, or our famous <span className="font-medium text-brown-600">Chocolate Coco</span>,  
+          Whether it’s <span className="font-medium text-yellow-600">Mango</span>, <span className="font-medium text-pink-600">Picafresa</span>, or our famous <span className="font-medium text-red-500">Mangonada</span>,  
           we’re here to sweeten your day. Come chill with us! 🍦🇧🇿
         </p>
       </div>

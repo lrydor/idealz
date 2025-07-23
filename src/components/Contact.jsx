@@ -12,10 +12,10 @@ const Contact = () => {
 
         <div className="space-y-4 text-gray-700">
           <p>
-            📍 Visit us: Calle Dulce 123, Ciudad Tropical, BZ
+            📍 Visit us: Ranchito, Corozal
           </p>
           <p>
-            📞 Call us: +501 123-4567
+            📞 Call us: +501 000-0000
           </p>
           <p>
             📩 Email: <a href="mailto:paletas@idealz.com" className="text-blue-600 hover:underline">paletas@idealz.com</a>
