@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   const fetchCart = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     if (!user) return;
+    console.log("current user:", user);
 
     const { data, error } = await supabase
       .from("cart_items")
