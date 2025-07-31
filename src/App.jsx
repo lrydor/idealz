@@ -3,7 +3,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Grid from './components/Menu'
-import Menu from './pages/Menu'
+import Cart from './pages/Cart'
 import './App.css'
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Grid />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
   )
