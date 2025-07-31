@@ -5,13 +5,13 @@ import About from "../components/About";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {" "}
-      {/* Optional: gives full-page height and soft background */}
+    <div className="min-h-screen bg-gradient-to-b from-white via-rose-100 to-amber-100">
       <Navbar />
       <Hero />
-      <About />
-      <Contact />
+      <div className="space-y-28 px-4 sm:px-8 lg:px-16 py-28">
+        <About />
+        <Contact />
+      </div>
     </div>
   );
 }

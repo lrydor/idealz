@@ -24,55 +24,67 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-      
-      <form
-        className="bg-white w-full max-w-sm p-6 rounded-xl shadow-lg space-y-5"
-        onSubmit={handleLogin}
-      >
-        <img src={logo} alt="Logo" className="h-12 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-gray-800 text-center">
+    <section className="bg-gradient-to-br from-yellow-50 to-rose-100 min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
+        <img src={logo} alt="Logo" className="h-14 mx-auto mb-2 animate-fade-in" />
+        <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
           Sign in to your account
-        </h2>
+        </h1>
 
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        <form onSubmit={handleLogin} className="space-y-5">
+          {error && (
+            <p className="text-red-600 text-sm font-medium text-center animate-fade-in">
+              {error}
+            </p>
+          )}
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <div>
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              placeholder="Enter your email"
+              type="email"
+              name="email"
+              id="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <div>
+            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              placeholder="Enter your password"
+              type="password"
+              name="password"
+              id="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+            />
+          </div>
 
-        <button
-          type="submit"
-          className="w-full bg-gradient-to-r from-yellow-100 to-pink-100
-        text-black font-bold py-2 px-4 rounded-full transition"
-        >
-          Login
-        </button>
-
-        <p className="text-sm text-center text-gray-600">
-          Don’t have an account?{" "}
-          <a
-            href="/register"
-            className="text-black hover:underline font-bold"
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-yellow-200 to-pink-300 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:brightness-110"
           >
+            Login
+          </button>
+        </form>
+
+        <p className="text-sm text-center text-rose-500">
+          Don’t have an account?{" "}
+          <a href="/register" className="text-pink-600 hover:underline font-bold">
             Register
           </a>
         </p>
-      </form>
-    </div>
+      </div>
+    </section>
   );
 }

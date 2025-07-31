@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import logo from "../assets/logo.png";
 
-//registering logic using supabase
 export default function Register() {
   const navigate = useNavigate();
 
@@ -54,7 +53,6 @@ export default function Register() {
       return setError("Failed to get user ID after registration.");
     }
 
-    // insert into profiles table after registration
     const { error: insertError } = await supabase.from("profiles").insert([
       {
         id: data.user.id,
@@ -63,69 +61,62 @@ export default function Register() {
         last_name: formData.last_name,
       },
     ]);
-    // if there's an error inserting into profiles
+
     if (insertError) {
       return setError(insertError.message);
     }
 
-    // redirect to login page after successful registration
     navigate("/login");
   };
 
   return (
-    <section className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 space-y-6">
-        <img src={logo} alt="Logo" className="h-12 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-gray-800 text-center">
+    <section className="bg-gradient-to-br from-yellow-50 to-rose-100 min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
+        <img src={logo} alt="Logo" className="h-14 mx-auto mb-2 animate-fade-in" />
+        <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
           Create an Account
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <p className="text-red-600 text-sm font-medium text-center">
+            <p className="text-red-600 text-sm font-medium text-center animate-fade-in">
               {error}
             </p>
           )}
 
-          <div>
-            <label
-              htmlFor="firstName"
-              className="flex mb-1 text-sm font-medium text-gray-700"
-            >
-              First Name
-            </label>
-            <input
-              placeholder="Enter your first name"
-              type="text"
-              name="first_name"
-              id="firstName"
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="firstName" className="mb-1 block text-sm font-medium text-gray-700">
+                First Name
+              </label>
+              <input
+                placeholder="Enter your first name"
+                type="text"
+                name="first_name"
+                id="firstName"
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              />
+            </div>
+            <div>
+              <label htmlFor="lastName" className="mb-1 block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                placeholder="Enter your last name"
+                type="text"
+                name="last_name"
+                id="lastName"
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              />
+            </div>
           </div>
+
           <div>
-            <label
-              htmlFor="lastName"
-              className="flex mb-1 text-sm font-medium text-gray-700"
-            >
-              Last Name
-            </label>
-            <input
-              placeholder="Enter your last name"
-              type="text"
-              name="last_name"
-              id="lastName"
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="flex mb-1 text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
               Email
             </label>
             <input
@@ -135,15 +126,12 @@ export default function Register() {
               id="email"
               required
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
             />
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="flex mb-1 text-sm font-medium text-gray-700 "
-            >
+            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -153,15 +141,12 @@ export default function Register() {
               id="password"
               required
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
             />
           </div>
 
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="flex mb-1 text-sm font-medium text-gray-700 "
-            >
+            <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-gray-700">
               Confirm Password
             </label>
             <input
@@ -171,7 +156,7 @@ export default function Register() {
               id="confirmPassword"
               required
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
             />
           </div>
 
@@ -182,12 +167,12 @@ export default function Register() {
               name="terms"
               checked={formData.terms}
               onChange={handleChange}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500"
               required
             />
             <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
               I accept the{" "}
-              <a href="#" className="text-gray-600 hover:underline font-medium">
+              <a href="#" className="text-rose-500 hover:underline font-medium">
                 Terms & Conditions
               </a>
             </label>
@@ -195,16 +180,15 @@ export default function Register() {
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-yellow-100 to-pink-100
-          text-black font-bold py-2 px-4 rounded-full transition"
+            className="w-full bg-gradient-to-r from-yellow-200 to-pink-300 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:brightness-110"
           >
             Create Account
           </button>
         </form>
 
-        <p className="text-sm text-center text-gray-600">
+        <p className="text-sm text-center text-rose-500">
           Already have an account?{" "}
-          <a href="/login" className="text-black hover:underline font-bold">
+          <a href="/login" className="text-pink-600 hover:underline font-bold">
             Login here
           </a>
         </p>
