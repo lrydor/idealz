@@ -1,13 +1,13 @@
-import ideal1 from "../assets/products/nance.jpeg";
-import ideal2 from "../assets/products/corn.jpeg";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import { useEffect, useState } from "react";
+import logo from "../assets/ddelogo.jpeg";
 import { supabase } from "../../supabaseClient";
 
 export default function Grid() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [products, setProducts] = useState([]);
 
   const openModal = (product) => {
     setSelectedProduct(product);
@@ -19,9 +19,7 @@ export default function Grid() {
     setSelectedProduct(null);
     setIsOpen(false);
   };
-  const [products, setProducts] = useState([]);
 
-  //fetching products from the database
   useEffect(() => {
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("products").select("*");
@@ -34,8 +32,7 @@ export default function Grid() {
 
     fetchProducts();
   }, []);
-  
-  // logic to add items to the cart
+
   const addToCart = async (productId, quantity) => {
     const {
       data: { user },
@@ -45,7 +42,6 @@ export default function Grid() {
       return alert("You must be logged in to add items to the cart.");
     }
 
-    // Check if already in cart
     const { data: existingItem, error: fetchError } = await supabase
       .from("cart_items")
       .select("*")
@@ -91,7 +87,9 @@ export default function Grid() {
       <Navbar />
       <section className="w-full bg-gradient-to-br from-yellow-50 to-rose-100 py-16 px-6">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-rose-600 mb-4 drop-shadow">Order By Unit</h1>
+          <h1 className="text-4xl font-extrabold text-rose-600 mb-4 drop-shadow">
+            Order By Unit
+          </h1>
         </div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
@@ -105,15 +103,15 @@ export default function Grid() {
                 alt={item.name}
                 className="w-full h-60 object-cover rounded-2xl mb-6 shadow-md"
               />
-              <h3 className="font-bold text-lg text-gray-800">{item.name}</h3>
-              <p className="text-sm text-gray-500">{item.desc}</p>
-              <p className="mt-2 font-semibold text-rose-500">
-                ${item.price.toFixed(2)}
+              <h3 className="text-2xl font-bold text-rose-600 mb-2">
+                {item.name}
+              </h3>
+              <p className="text-gray-600 text-sm mb-3 px-2">{item.desc}</p>
+              <p className="text-lg font-semibold text-amber-700 mb-4">
+                ${item.price.toFixed(2)} / each
               </p>
-
-              {/* Add button (you can add icon later) */}
               <button
-                className="absolute bottom-4 right-4 bg-rose-400 hover:bg-rose-500 text-white rounded-full px-3 py-1 shadow-md transition text-sm font-bold"
+                className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition"
                 onClick={() => openModal(item)}
               >
                 Add to cart
@@ -121,37 +119,33 @@ export default function Grid() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-8 text-red-400 font-semibold text-lg">
+
+        <div className="text-center mt-16 text-rose-400 font-semibold text-lg">
           <h1>NOTE: All prices are in BZD - Belizean Dollars</h1>
         </div>
       </section>
+
+      {/* Modal */}
       {isOpen && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md relative">
-            {/* Cerrar */}
             <button
               className="absolute top-2 right-3 text-gray-400 hover:text-black text-xl"
               onClick={closeModal}
             >
               ×
             </button>
-
-            {/* Imagen */}
             <img
               src={selectedProduct.image_url}
               alt={selectedProduct.name}
               className="w-24 h-24 mx-auto object-cover rounded-full border-4 border-yellow-200 mb-4"
             />
-
-            {/* Título y descripción */}
             <h2 className="text-xl font-bold text-center">
               {selectedProduct.name}
             </h2>
             <p className="text-sm text-gray-600 text-center mb-4">
               {selectedProduct.description}
             </p>
-
-            {/* Cantidad */}
             <div className="flex items-center justify-center gap-2 mb-4">
               <label className="font-medium">Quantity:</label>
               <input
@@ -162,8 +156,6 @@ export default function Grid() {
                 className="w-16 border rounded px-2 py-1 text-center"
               />
             </div>
-
-            {/* Botones */}
             <div className="flex justify-between">
               <button
                 onClick={closeModal}
@@ -184,6 +176,50 @@ export default function Grid() {
           </div>
         </div>
       )}
+
+      {/* FOOTER */}
+      <footer className="w-full bg-pink-100 text-center text-sm text-rose-700 pt-10 pb-6 px-4 border-t border-rose-200">
+        <div className="flex flex-col items-center gap-3 mb-4">
+          <img src={logo} alt="D&D Logo" className="h-14" />
+          <p className="font-bold text-pink-600">D&D CREATION</p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-6 mb-4 text-xs font-medium">
+          <a href="#" className="hover:underline">
+            Terms of Use
+          </a>
+          <a href="#" className="hover:underline">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:underline">
+            Contact
+          </a>
+          <a href="#" className="hover:underline">
+            Help
+          </a>
+        </div>
+        <div className="mb-3">
+          <p className="text-xs">Contact us:</p>
+          <p className="text-xs">
+            📧{" "}
+            <a
+              href="mailto:dorran.solis@unadeca.net"
+              className="hover:underline"
+            >
+              dorran.solis@unadeca.net
+            </a>{" "}
+            |{" "}
+            <a href="mailto:d.ruiz@unadeca.net" className="hover:underline">
+              d.ruiz@unadeca.net
+            </a>
+          </p>
+        </div>
+        <p className="text-xs max-w-xl mx-auto text-rose-500">
+          D&D CREATION is a creative project made for learning and fun.
+        </p>
+        <p className="mt-4 text-xs text-rose-400">
+          &copy; 2025 D&D. All rights reserved.
+        </p>
+      </footer>
     </>
   );
 }

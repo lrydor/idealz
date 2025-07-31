@@ -26,7 +26,11 @@ export default function Login() {
   return (
     <section className="bg-gradient-to-br from-yellow-50 to-rose-100 min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
-        <img src={logo} alt="Logo" className="h-14 mx-auto mb-2 animate-fade-in" />
+        <img
+          src={logo}
+          alt="Logo"
+          className="h-14 mx-auto mb-2 animate-fade-in"
+        />
         <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
           Sign in to your account
         </h1>
@@ -39,7 +43,10 @@ export default function Login() {
           )}
 
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="mb-1 flex text-lg font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -55,7 +62,10 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="mb-1 flex text-lg font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -79,7 +89,7 @@ export default function Login() {
         </form>
 
         <p className="text-sm text-center text-rose-500">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <a href="/register" className="text-pink-600 hover:underline font-bold">
             Register
           </a>

@@ -72,7 +72,11 @@ export default function Register() {
   return (
     <section className="bg-gradient-to-br from-yellow-50 to-rose-100 min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
-        <img src={logo} alt="Logo" className="h-14 mx-auto mb-2 animate-fade-in" />
+        <img
+          src={logo}
+          alt="Logo"
+          className="h-14 mx-auto mb-2 animate-fade-in"
+        />
         <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
           Create an Account
         </h1>
@@ -86,7 +90,10 @@ export default function Register() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="firstName" className="mb-1 block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="firstName"
+                className="mb-1 flex text-sm font-medium text-gray-700"
+              >
                 First Name
               </label>
               <input
@@ -100,7 +107,10 @@ export default function Register() {
               />
             </div>
             <div>
-              <label htmlFor="lastName" className="mb-1 block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="lastName"
+                className="mb-1 flex text-sm font-medium text-gray-700"
+              >
                 Last Name
               </label>
               <input
@@ -116,7 +126,10 @@ export default function Register() {
           </div>
 
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="mb-1 flex text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -131,7 +144,10 @@ export default function Register() {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="mb-1 flex text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -146,7 +162,10 @@ export default function Register() {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="confirmPassword"
+              className="mb-1 flex text-sm font-medium text-gray-700"
+            >
               Confirm Password
             </label>
             <input
