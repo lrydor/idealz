@@ -1,4 +1,4 @@
-import logo from '../assets/ddelogo.jpeg'
+import logo from '../assets/ddlogo.png'
 
 const Footer = () => {
   return (
