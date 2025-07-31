@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import logo from "../assets/ddelogo.jpeg";
+import logo from "../assets/ddlogo.png";
 import { supabase } from "../../supabaseClient";
 
 export default function Grid() {
