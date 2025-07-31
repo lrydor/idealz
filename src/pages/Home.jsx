@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Contact from "../components/Contact";
@@ -14,7 +13,6 @@ export default function Home() {
       <div className="space-y-28 px-4 sm:px-8 lg:px-16 py-28">
         <About />
         <Contact />
-        <Footer />
       </div>
     </div>
   );

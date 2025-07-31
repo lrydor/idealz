@@ -16,7 +16,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Grid />} />
         <Route path="/cart" element={<Cart />} />
-        
       </Routes>
     </Router>
   )
