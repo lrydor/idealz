@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Grid from './components/Menu'
 import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
 
 import './App.css'
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Grid />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </Router>
   )

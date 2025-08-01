@@ -6,12 +6,8 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   const fetchCart = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    console.log("current user:", user);
 
     const { data, error } = await supabase
       .from("cart_items")
@@ -19,7 +15,7 @@ export default function Cart() {
       .eq("user_id", user.id);
 
     if (error) {
-      console.error("Error fetching cart:", error);
+      console.error("Error fetching cart:", error.message);
     } else {
       setCartItems(data);
     }
@@ -29,46 +25,49 @@ export default function Cart() {
     fetchCart();
   }, []);
 
-  const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.quantity * item.product.price,
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.quantity * item.product.price,
     0
   );
 
   return (
     <>
       <Navbar />
-      <div className="max-w-4xl mx-auto py-12 px-4">
-        <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
+      <div className="max-w-4xl mx-auto py-10 px-4">
+        <h1 className="text-3xl font-bold mb-6 text-center text-rose-500">Your Cart</h1>
 
         {cartItems.length === 0 ? (
-          <p>Your cart is empty.</p>
+          <p className="text-center text-gray-600">Your cart is empty.</p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between border p-4 rounded-lg bg-white shadow"
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={item.product.image_url}
-                    alt={item.product.name}
-                    className="h-16 w-16 rounded object-cover"
-                  />
-                  <div>
-                    <h4 className="font-bold text-lg">{item.product.name}</h4>
-                    <p className="text-sm text-gray-600">
-                      Qty: {item.quantity}
-                    </p>
-                  </div>
+              <div key={item.id} className="flex items-center gap-4 bg-white rounded-xl shadow p-4">
+                <img
+                  src={item.product.image_url}
+                  alt={item.product.name}
+                  className="w-20 h-20 object-cover rounded-lg border border-yellow-200"
+                />
+                <div className="flex-1">
+                  <h2 className="text-lg font-bold text-gray-800">{item.product.name}</h2>
+                  <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                 </div>
-                <p className="font-semibold text-lg">
-                  ${item.product.price * item.quantity}
-                </p>
+                <div className="text-right font-semibold text-rose-500 text-lg">
+                  ${(item.product.price * item.quantity).toFixed(2)}
+                </div>
               </div>
             ))}
-            <div className="text-right font-bold text-xl mt-4">
-              Total: ${totalPrice}
+
+            <div className="text-right text-xl font-bold mt-6 text-rose-600">
+              Total: ${total.toFixed(2)}
+            </div>
+
+            <div className="text-center mt-6">
+              <a
+                href="/checkout"
+                className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-full transition"
+              >
+                Proceed to Checkout
+              </a>
             </div>
           </div>
         )}
