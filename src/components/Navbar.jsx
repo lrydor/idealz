@@ -49,16 +49,16 @@ export default function Navbar() {
           {/* Right section (Desktop) */}
           <div className="hidden md:flex items-center gap-5">
             <a href="/menu" className="text-black hover:underline font-medium">
-              Menu
+              Menú
             </a>
             <a href="#about" className="text-black hover:underline font-medium">
-              About
+              Sobre Nosotros
             </a>
             <a
               href="#contact"
               className="text-black hover:underline font-medium"
             >
-              Contact
+              Contacto
             </a>
 
             {userName ? (
@@ -92,7 +92,7 @@ export default function Navbar() {
                   className="bg-gradient-to-br from-pink-300 to-yellow-300 text-white font-extrabold px-4 py-2 rounded-full hover:brightness-110 transition"
                   onClick={() => navigate("/register")}
                 >
-                  Join now
+                  Unirse
                 </button>
               </>
             )}
@@ -118,21 +118,21 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             className="block text-gray-700 hover:underline"
           >
-            Menu
+            Menú
           </a>
           <a
             href="#about"
             onClick={() => setIsOpen(false)}
             className="block text-gray-700 hover:underline"
           >
-            About
+            Sobre Nosotros
           </a>
           <a
             href="#contact"
             onClick={() => setIsOpen(false)}
             className="block text-gray-700 hover:underline"
           >
-            Contact
+            Contacto
           </a>
 
           <button
@@ -178,7 +178,7 @@ export default function Navbar() {
                   navigate("/register");
                 }}
               >
-                Join now
+                Unirse
               </button>
             </>
           )}

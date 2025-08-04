@@ -1,22 +1,28 @@
-import React from 'react'
-import logo from '../assets/ddlogo.png'
+import React from "react";
+import logo from "../assets/ddlogo.png";
 
 const Contact = () => {
   return (
     <>
       {/* Sección de contacto */}
-      <section id="contact" className="w-full pt-28 pb-24 px-4 flex justify-center">
+      <section
+        id="contact"
+        className="w-full pt-28 pb-24 px-4 flex justify-center"
+      >
         <div className="max-w-5xl w-full bg-white/60 backdrop-blur-2xl rounded-3xl shadow-2xl p-10 text-center">
           <h2 className="text-4xl font-extrabold text-rose-600 mb-6 drop-shadow-sm">
-            Contact Us
+            Contáctanos
           </h2>
           <p className="text-amber-800 text-lg mb-8 font-medium">
-            Do you have questions, suggestions, or just want to say hola? 🌞🍧 <br />
-            We'd love to hear from you!
+            ¿Tienes preguntas, sugerencias o simplemente quieres decir hola?
+            🌞🍧 <br />
+            ¡Nos encantaría saber de ti!
           </p>
 
           <div className="text-gray-800 space-y-6 mb-10">
-            <p className="font-medium text-lg">📍 Visit us: Ranchito, Corozal</p>
+            <p className="font-medium text-lg">
+              📍 Visítanos: Ranchito, Corozal
+            </p>
 
             <div className="rounded-2xl overflow-hidden shadow-md w-full h-[450px]">
               <iframe
@@ -31,9 +37,15 @@ const Contact = () => {
               ></iframe>
             </div>
 
-            <p className="font-medium text-lg">📞 Call us: +501 000-0000</p>
+            <p className="font-medium text-lg">📞 Llámanos: +501 000-0000</p>
             <p className="text-lg">
-              📩 Email: <a href="mailto:paletas@idealz.com" className="text-pink-600 hover:underline">paletas@idealz.com</a>
+              📩 Correo electrónico:{" "}
+              <a
+                href="mailto:paletas@idealz.com"
+                className="text-pink-600 hover:underline"
+              >
+                paletas@idealz.com
+              </a>
             </p>
           </div>
 
@@ -41,14 +53,12 @@ const Contact = () => {
             href="mailto:paletas@idealz.com"
             className="inline-block bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-8 rounded-full shadow-md transition"
           >
-            Send us a message
+            Envíanos un mensaje
           </a>
         </div>
       </section>
-
-      
     </>
-  )
-}
+  );
+};
 
-export default Contact
+export default Contact;

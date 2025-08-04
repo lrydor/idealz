@@ -34,10 +34,10 @@ export default function Cart() {
     <>
       <Navbar />
       <div className="max-w-4xl mx-auto py-10 px-4">
-        <h1 className="text-3xl font-bold mb-6 text-center text-rose-500">Your Cart</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-rose-500">Tu carrito</h1>
 
         {cartItems.length === 0 ? (
-          <p className="text-center text-gray-600">Your cart is empty.</p>
+          <p className="text-center text-gray-600">Tu carrito está vacío.</p>
         ) : (
           <div className="space-y-4">
             {cartItems.map((item) => (
@@ -66,7 +66,7 @@ export default function Cart() {
                 href="/checkout"
                 className="inline-block bg-rose-500 hover:bg-rose-600 text-white font-bold px-6 py-3 rounded-full transition"
               >
-                Proceed to Checkout
+                Proceder al pago
               </a>
             </div>
           </div>

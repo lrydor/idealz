@@ -32,7 +32,7 @@ export default function Login() {
           className="h-14 mx-auto mb-2 animate-fade-in"
         />
         <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
-          Sign in to your account
+          Iniciar Sesión
         </h1>
 
         <form onSubmit={handleLogin} className="space-y-5">
@@ -47,10 +47,10 @@ export default function Login() {
               htmlFor="email"
               className="mb-1 flex text-lg font-medium text-gray-700"
             >
-              Email
+              Correo
             </label>
             <input
-              placeholder="Enter your email"
+              placeholder="Introduce tu correo"
               type="email"
               name="email"
               id="email"
@@ -66,10 +66,10 @@ export default function Login() {
               htmlFor="password"
               className="mb-1 flex text-lg font-medium text-gray-700"
             >
-              Password
+              Contraseña
             </label>
             <input
-              placeholder="Enter your password"
+              placeholder="Introduce tu contraseña"
               type="password"
               name="password"
               id="password"
@@ -84,16 +84,16 @@ export default function Login() {
             type="submit"
             className="w-full bg-gradient-to-r from-yellow-200 to-pink-300 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:brightness-110"
           >
-            Login
+            Iniciar Sesión
           </button>
         </form>
 
         <p className="text-sm text-center text-rose-500">
-          Don't have an account?{" "}
+          No tienes una cuenta?{" "}
           <a href="/register" className="text-pink-600 hover:underline font-bold">
-            Register
+            Registrarse
           </a>
-        </p>
+        </p>  
       </div>
     </section>
   );

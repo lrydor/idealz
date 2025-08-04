@@ -54,12 +54,12 @@ export default function Checkout() {
       !cardData.expiry ||
       !cardData.cvc
     ) {
-      alert("Please fill in all card fields.");
+      alert("Por favor, completa todos los campos.");
       return;
     }
 
     // Dummy alert
-    alert(`✅ Payment Successful!\nThank you for your purchase.`);
+    alert(`✅ Pago exitoso!\nGracias por tu compra.`);
   };
 
   return (
@@ -69,7 +69,7 @@ export default function Checkout() {
         <h2 className="text-3xl font-bold mb-6">Checkout</h2>
 
         {cartItems.length === 0 ? (
-          <p>Your cart is empty.</p>
+          <p>Tu carrito está vacío.</p>
         ) : (
           <>
             <div className="space-y-4 mb-8">
@@ -99,12 +99,12 @@ export default function Checkout() {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-lg">
-              <h3 className="text-xl font-semibold mb-4">Payment Details</h3>
+              <h3 className="text-xl font-semibold mb-4">Detalles de pago</h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                   type="text"
                   name="name"
-                  placeholder="Name on card"
+                  placeholder="Nombre en la tarjeta"
                   value={cardData.name}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2"
@@ -112,7 +112,7 @@ export default function Checkout() {
                 <input
                   type="text"
                   name="number"
-                  placeholder="Card number"
+                  placeholder="Número de tarjeta"
                   value={cardData.number}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2"
@@ -144,7 +144,7 @@ export default function Checkout() {
                   type="submit"
                   className="w-full mt-4 bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 rounded-full"
                 >
-                  Pay Now
+                  Pagar ahora
                 </button>
               </form>
             </div>

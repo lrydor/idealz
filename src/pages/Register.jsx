@@ -78,7 +78,7 @@ export default function Register() {
           className="h-14 mx-auto mb-2 animate-fade-in"
         />
         <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
-          Create an Account
+          Crear Cuenta
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -94,10 +94,10 @@ export default function Register() {
                 htmlFor="firstName"
                 className="mb-1 flex text-sm font-medium text-gray-700"
               >
-                First Name
+                Nombre
               </label>
               <input
-                placeholder="Enter your first name"
+                placeholder="Introduce tu nombre"
                 type="text"
                 name="first_name"
                 id="firstName"
@@ -111,10 +111,10 @@ export default function Register() {
                 htmlFor="lastName"
                 className="mb-1 flex text-sm font-medium text-gray-700"
               >
-                Last Name
+                Apellido
               </label>
               <input
-                placeholder="Enter your last name"
+                placeholder="Introduce tu apellido"
                 type="text"
                 name="last_name"
                 id="lastName"
@@ -130,10 +130,10 @@ export default function Register() {
               htmlFor="email"
               className="mb-1 flex text-sm font-medium text-gray-700"
             >
-              Email
+              Correo
             </label>
             <input
-              placeholder="Enter your email"
+              placeholder="Introduce tu correo"
               type="email"
               name="email"
               id="email"
@@ -148,10 +148,10 @@ export default function Register() {
               htmlFor="password"
               className="mb-1 flex text-sm font-medium text-gray-700"
             >
-              Password
+              Contraseña
             </label>
             <input
-              placeholder="Enter your password"
+              placeholder="Introduce tu contraseña"
               type="password"
               name="password"
               id="password"
@@ -166,10 +166,10 @@ export default function Register() {
               htmlFor="confirmPassword"
               className="mb-1 flex text-sm font-medium text-gray-700"
             >
-              Confirm Password
+              Confirmar Contraseña
             </label>
             <input
-              placeholder="Confirm your password"
+              placeholder="Confirma tu contraseña"
               type="password"
               name="confirmPassword"
               id="confirmPassword"
@@ -190,9 +190,9 @@ export default function Register() {
               required
             />
             <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-              I accept the{" "}
+              Acepto los{" "}
               <a href="#" className="text-rose-500 hover:underline font-medium">
-                Terms & Conditions
+                Términos y Condiciones
               </a>
             </label>
           </div>
@@ -201,14 +201,14 @@ export default function Register() {
             type="submit"
             className="w-full bg-gradient-to-r from-yellow-200 to-pink-300 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:brightness-110"
           >
-            Create Account
+            Crear Cuenta
           </button>
         </form>
 
         <p className="text-sm text-center text-rose-500">
-          Already have an account?{" "}
+          Tienes una cuenta?{" "}
           <a href="/login" className="text-pink-600 hover:underline font-bold">
-            Login here
+            Iniciar Sesión
           </a>
         </p>
       </div>
