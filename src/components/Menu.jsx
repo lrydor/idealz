@@ -109,7 +109,7 @@ export default function Grid() {
               </h3>
               <p className="text-gray-600 text-sm mb-3 px-2">{item.desc}</p>
               <p className="text-lg font-semibold text-amber-700 mb-4">
-                ${item.price.toFixed(2)} c / u
+                ${item.price.toFixed(2)} BZD c/u
               </p>
               <button
                 className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition"
