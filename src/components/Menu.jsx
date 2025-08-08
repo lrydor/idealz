@@ -86,9 +86,9 @@ export default function Grid() {
   return (
     <>
       <Navbar />
-      <section className="w-full bg-gradient-to-br from-yellow-50 to-rose-100 py-16 px-6">
+      <section className="w-full bg-gradient-to-br from-[#efebe9] to-[#d7ccc8] py-16 px-6">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-rose-600 mb-4 drop-shadow">
+          <h1 className="text-4xl font-extrabold text-[#5d4037] mb-4 drop-shadow">
             Ordenar por Unidad
           </h1>
         </div>
@@ -97,22 +97,22 @@ export default function Grid() {
           {products.map((item, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 overflow-hidden flex flex-col items-center text-center p-6"
+              className="bg-[#efebe9] rounded-3xl shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 overflow-hidden flex flex-col items-center text-center p-6"
             >
               <img
                 src={item.image_url}
                 alt={item.name}
                 className="w-full h-60 object-cover rounded-2xl mb-6 shadow-md"
               />
-              <h3 className="text-2xl font-bold text-rose-600 mb-2">
+              <h3 className="text-2xl font-bold text-[#6d4c41] mb-2">
                 {item.name}
               </h3>
-              <p className="text-gray-600 text-sm mb-3 px-2">{item.desc}</p>
-              <p className="text-lg font-semibold text-amber-700 mb-4">
+              <p className="text-[#5d4037] text-sm mb-3 px-2">{item.desc}</p>
+              <p className="text-lg font-semibold text-[#4e342e] mb-4">
                 ${item.price.toFixed(2)} BZD c/u
               </p>
               <button
-                className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition"
+                className="bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-2 px-6 rounded-full shadow-lg transition"
                 onClick={() => openModal(item)}
               >
                 Agregar al carrito
@@ -121,7 +121,7 @@ export default function Grid() {
           ))}
         </div>
 
-        <div className="text-center mt-16 text-rose-400 font-semibold text-lg">
+        <div className="text-center mt-16 text-[#6d4c41] font-semibold text-lg">
           <h1>NOTA: Todos los precios en dolares Beliceños - BZD</h1>
         </div>
       </section>
@@ -129,9 +129,9 @@ export default function Grid() {
       {/* Modal */}
       {isOpen && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md relative">
+          <div className="bg-[#efebe9] p-6 rounded-xl shadow-lg w-[90%] max-w-md relative">
             <button
-              className="absolute top-2 right-3 text-gray-400 hover:text-black text-xl"
+              className="absolute top-2 right-3 text-[#8d6e63] hover:text-[#3e2723] text-xl"
               onClick={closeModal}
             >
               ×
@@ -139,16 +139,16 @@ export default function Grid() {
             <img
               src={selectedProduct.image_url}
               alt={selectedProduct.name}
-              className="w-24 h-24 mx-auto object-cover rounded-full border-4 border-yellow-200 mb-4"
+              className="w-24 h-24 mx-auto object-cover rounded-full border-4 border-[#d7ccc8] mb-4"
             />
-            <h2 className="text-xl font-bold text-center">
+            <h2 className="text-xl font-bold text-center text-[#3e2723]">
               {selectedProduct.name}
             </h2>
-            <p className="text-sm text-gray-600 text-center mb-4">
+            <p className="text-sm text-[#5d4037] text-center mb-4">
               {selectedProduct.description}
             </p>
             <div className="flex items-center justify-center gap-2 mb-4">
-              <label className="font-medium">Quantity:</label>
+              <label className="font-medium text-[#3e2723]">Quantity:</label>
               <input
                 type="number"
                 min="1"
@@ -160,7 +160,7 @@ export default function Grid() {
             <div className="flex justify-between">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 bg-[#d7ccc8] rounded hover:bg-[#bcaaa4]"
               >
                 Cancel
               </button>
@@ -169,7 +169,7 @@ export default function Grid() {
                   await addToCart(selectedProduct.id, quantity);
                   closeModal();
                 }}
-                className="px-4 py-2 bg-rose-500 text-white rounded hover:bg-rose-600"
+                className="px-4 py-2 bg-[#4e342e] text-[#efebe9] rounded hover:bg-[#3e2723]"
               >
                 Confirm
               </button>
@@ -178,7 +178,7 @@ export default function Grid() {
         </div>
       )}
 
-      <Footer/>
+      <Footer />
     </>
   );
 }

@@ -9,17 +9,17 @@ const Contact = () => {
         id="contact"
         className="w-full pt-28 pb-24 px-4 flex justify-center"
       >
-        <div className="max-w-5xl w-full bg-white/60 backdrop-blur-2xl rounded-3xl shadow-2xl p-10 text-center">
-          <h2 className="text-4xl font-extrabold text-rose-600 mb-6 drop-shadow-sm">
+        <div className="max-w-5xl w-full bg-[#f5f5f5]/60 backdrop-blur-2xl rounded-3xl shadow-2xl p-10 text-center">
+          <h2 className="text-4xl font-extrabold text-[#6d4c41] mb-6 drop-shadow-sm">
             Contáctanos
           </h2>
-          <p className="text-amber-800 text-lg mb-8 font-medium">
+          <p className="text-[#4e342e] text-lg mb-8 font-medium">
             ¿Tienes preguntas, sugerencias o simplemente quieres decir hola?
             🌞🍧 <br />
             ¡Nos encantaría saber de ti!
           </p>
 
-          <div className="text-gray-800 space-y-6 mb-10">
+          <div className="text-[#5d4037] space-y-6 mb-10">
             <p className="font-medium text-lg">
               📍 Visítanos: Ranchito, Corozal
             </p>
@@ -42,7 +42,7 @@ const Contact = () => {
               📩 Correo electrónico:{" "}
               <a
                 href="mailto:paletas@idealz.com"
-                className="text-pink-600 hover:underline"
+                className="text-[#6d4c41] hover:text-[#4e342e] hover:underline font-semibold"
               >
                 paletas@idealz.com
               </a>
@@ -51,7 +51,7 @@ const Contact = () => {
 
           <a
             href="mailto:paletas@idealz.com"
-            className="inline-block bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-8 rounded-full shadow-md transition"
+            className="inline-block bg-[#6d4c41] hover:bg-[#4e342e] text-[#f5f5f5] font-semibold py-3 px-8 rounded-full shadow-md transition"
           >
             Envíanos un mensaje
           </a>

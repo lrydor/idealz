@@ -28,15 +28,15 @@ export default function Register() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      return setError("Passwords do not match");
+      return setError("Las contraseñas no coinciden");
     }
 
     if (!formData.terms) {
-      return setError("You must accept the terms and conditions");
+      return setError("Debes aceptar los términos y condiciones");
     }
 
     if (!formData.first_name || !formData.last_name) {
-      return setError("Please enter your full name.");
+      return setError("Por favor ingresa tu nombre completo.");
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -50,7 +50,7 @@ export default function Register() {
 
     const userId = data?.user?.id;
     if (!userId) {
-      return setError("Failed to get user ID after registration.");
+      return setError("No se pudo obtener el ID del usuario.");
     }
 
     const { error: insertError } = await supabase.from("profiles").insert([
@@ -70,20 +70,20 @@ export default function Register() {
   };
 
   return (
-    <section className="bg-gradient-to-br from-yellow-50 to-rose-100 min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
+    <section className="bg-gradient-to-br from-[#f5ece7] to-[#f2e6df] min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl bg-[#f9f2ed] rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
         <img
           src={logo}
           alt="Logo"
           className="h-14 mx-auto mb-2 animate-fade-in"
         />
-        <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
+        <h1 className="text-3xl font-extrabold text-[#4e342e] text-center drop-shadow animate-fade-in">
           Crear Cuenta
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <p className="text-red-600 text-sm font-medium text-center animate-fade-in">
+            <p className="text-red-500 text-sm font-medium text-center animate-fade-in">
               {error}
             </p>
           )}
@@ -92,7 +92,7 @@ export default function Register() {
             <div>
               <label
                 htmlFor="firstName"
-                className="mb-1 flex text-sm font-medium text-gray-700"
+                className="mb-1 flex text-sm font-medium text-[#5d4037]"
               >
                 Nombre
               </label>
@@ -103,13 +103,13 @@ export default function Register() {
                 id="firstName"
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+                className="w-full px-4 py-3 border border-[#d7c4b8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#b89c87] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#c4a793]"
               />
             </div>
             <div>
               <label
                 htmlFor="lastName"
-                className="mb-1 flex text-sm font-medium text-gray-700"
+                className="mb-1 flex text-sm font-medium text-[#5d4037]"
               >
                 Apellido
               </label>
@@ -120,7 +120,7 @@ export default function Register() {
                 id="lastName"
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+                className="w-full px-4 py-3 border border-[#d7c4b8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#b89c87] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#c4a793]"
               />
             </div>
           </div>
@@ -128,7 +128,7 @@ export default function Register() {
           <div>
             <label
               htmlFor="email"
-              className="mb-1 flex text-sm font-medium text-gray-700"
+              className="mb-1 flex text-sm font-medium text-[#5d4037]"
             >
               Correo
             </label>
@@ -139,14 +139,14 @@ export default function Register() {
               id="email"
               required
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              className="w-full px-4 py-3 border border-[#d7c4b8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#b89c87] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#c4a793]"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="mb-1 flex text-sm font-medium text-gray-700"
+              className="mb-1 flex text-sm font-medium text-[#5d4037]"
             >
               Contraseña
             </label>
@@ -157,14 +157,14 @@ export default function Register() {
               id="password"
               required
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              className="w-full px-4 py-3 border border-[#d7c4b8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#b89c87] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#c4a793]"
             />
           </div>
 
           <div>
             <label
               htmlFor="confirmPassword"
-              className="mb-1 flex text-sm font-medium text-gray-700"
+              className="mb-1 flex text-sm font-medium text-[#5d4037]"
             >
               Confirmar Contraseña
             </label>
@@ -175,7 +175,7 @@ export default function Register() {
               id="confirmPassword"
               required
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              className="w-full px-4 py-3 border border-[#d7c4b8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#b89c87] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#c4a793]"
             />
           </div>
 
@@ -186,28 +186,28 @@ export default function Register() {
               name="terms"
               checked={formData.terms}
               onChange={handleChange}
-              className="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500"
+              className="w-4 h-4 text-[#8d6e63] bg-gray-100 border-gray-300 rounded focus:ring-[#a67d61]"
               required
             />
-            <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
+            <label htmlFor="terms" className="ml-2 text-sm text-[#5d4037]">
               Acepto los{" "}
-              <a href="#" className="text-rose-500 hover:underline font-medium">
+              <a href="#" className="text-[#a67d61] hover:underline font-medium">
                 Términos y Condiciones
               </a>
             </label>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-yellow-200 to-pink-300 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:brightness-110"
-          >
-            Crear Cuenta
-          </button>
+         <button
+  type="submit"
+  className="w-full bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105"
+>
+  Crear Cuenta
+</button>
         </form>
 
-        <p className="text-sm text-center text-rose-500">
-          Tienes una cuenta?{" "}
-          <a href="/login" className="text-pink-600 hover:underline font-bold">
+        <p className="text-sm text-center text-[#6d4c41]">
+          ¿Ya tienes una cuenta?{" "}
+          <a href="/login" className="text-[#a67d61] hover:underline font-bold">
             Iniciar Sesión
           </a>
         </p>

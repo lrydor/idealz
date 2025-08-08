@@ -24,20 +24,20 @@ export default function Login() {
   };
 
   return (
-    <section className="bg-gradient-to-br from-yellow-50 to-rose-100 min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
+    <section className="bg-gradient-to-br from-[#fdf8f5] to-[#f8f2ed] min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-2xl bg-[#fffaf7] rounded-3xl shadow-2xl p-10 space-y-6 transition-all duration-500 ease-in-out hover:scale-[1.01]">
         <img
           src={logo}
           alt="Logo"
           className="h-14 mx-auto mb-2 animate-fade-in"
         />
-        <h1 className="text-3xl font-extrabold text-rose-600 text-center drop-shadow animate-fade-in">
+        <h1 className="text-3xl font-extrabold text-[#6d4c41] text-center drop-shadow animate-fade-in">
           Iniciar Sesión
         </h1>
 
         <form onSubmit={handleLogin} className="space-y-5">
           {error && (
-            <p className="text-red-600 text-sm font-medium text-center animate-fade-in">
+            <p className="text-red-500 text-sm font-medium text-center animate-fade-in">
               {error}
             </p>
           )}
@@ -45,7 +45,7 @@ export default function Login() {
           <div>
             <label
               htmlFor="email"
-              className="mb-1 flex text-lg font-medium text-gray-700"
+              className="mb-1 flex text-lg font-medium text-[#5c3a2e]"
             >
               Correo
             </label>
@@ -57,14 +57,14 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              className="w-full px-4 py-3 border border-[#e8dcd4] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d8bfae] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#cfae97]"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="mb-1 flex text-lg font-medium text-gray-700"
+              className="mb-1 flex text-lg font-medium text-[#5c3a2e]"
             >
               Contraseña
             </label>
@@ -76,21 +76,22 @@ export default function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-rose-300"
+              className="w-full px-4 py-3 border border-[#e8dcd4] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d8bfae] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#cfae97]"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-yellow-200 to-pink-300 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:brightness-110"
-          >
-            Iniciar Sesión
-          </button>
+         <button
+  type="submit"
+  className="w-full bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105"
+>
+  Iniciar Sesión
+</button>
+
         </form>
 
-        <p className="text-sm text-center text-rose-500">
-          No tienes una cuenta?{" "}
-          <a href="/register" className="text-pink-600 hover:underline font-bold">
+        <p className="text-sm text-center text-[#6d4c41]">
+          ¿No tienes una cuenta?{" "}
+          <a href="/register" className="text-[#a47551] hover:underline font-bold">
             Registrarse
           </a>
         </p>  
