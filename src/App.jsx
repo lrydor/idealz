@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import Grid from './components/Menu'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
+import Admin from './pages/Admin'
 
 import './App.css'
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/menu" element={<Grid />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path= "/admin" element={<Admin />} />
         </Routes>
       </Router>
     </div>
