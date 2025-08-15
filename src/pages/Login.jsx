@@ -7,6 +7,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -20,6 +21,23 @@ export default function Login() {
     } else {
       setError(null);
       navigate("/");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      setError("Por favor introduce tu correo para restablecer la contraseña.");
+      return;
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo:
+        "https://idealz-git-main-lrydors-projects.vercel.app/UpdatePassword", // adjust URL
+    });
+    if (error) {
+      setError(error.message);
+    } else {
+      setError(null);
+      setMessage("Hemos enviado un enlace para restablecer tu contraseña.");
     }
   };
 
@@ -37,8 +55,13 @@ export default function Login() {
 
         <form onSubmit={handleLogin} className="space-y-5">
           {error && (
-            <p className="text-red-500 text-sm font-medium text-center animate-fade-in">
+            <p className="text-red-500 text-sm font-medium text-center">
               {error}
+            </p>
+          )}
+          {message && (
+            <p className="text-green-600 text-sm font-medium text-center">
+              {message}
             </p>
           )}
 
@@ -57,7 +80,7 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-[#e8dcd4] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d8bfae] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#cfae97]"
+              className="w-full px-4 py-3 border border-[#e8dcd4] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d8bfae] shadow-inner"
             />
           </div>
 
@@ -76,25 +99,36 @@ export default function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-[#e8dcd4] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d8bfae] shadow-inner transition duration-300 ease-in-out hover:ring-2 hover:ring-[#cfae97]"
+              className="w-full px-4 py-3 border border-[#e8dcd4] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d8bfae] shadow-inner"
             />
           </div>
 
-         <button
-  type="submit"
-  className="w-full bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105"
->
-  Iniciar Sesión
-</button>
-
+          <button
+            type="submit"
+            className="w-full bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out hover:scale-105"
+          >
+            Iniciar Sesión
+          </button>
         </form>
+
+        <div className="text-center mt-4">
+          <button
+            onClick={handleResetPassword}
+            className="text-[#a47551] hover:underline font-bold text-sm"
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
+        </div>
 
         <p className="text-sm text-center text-[#6d4c41]">
           ¿No tienes una cuenta?{" "}
-          <a href="/register" className="text-[#a47551] hover:underline font-bold">
+          <a
+            href="/register"
+            className="text-[#a47551] hover:underline font-bold"
+          >
             Registrarse
           </a>
-        </p>  
+        </p>
       </div>
     </section>
   );
