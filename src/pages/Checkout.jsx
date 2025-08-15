@@ -30,7 +30,6 @@ export default function Checkout() {
 
   useEffect(() => {
     const renderPayPalButton = () => {
-      // Evita duplicados eliminando el contenido previo
       const container = document.getElementById("paypal-button-container");
       if (container) {
         container.innerHTML = "";
@@ -54,7 +53,6 @@ export default function Checkout() {
             alert(
               `✅ Pago con PayPal completado por ${details.payer.name.given_name}`
             );
-            // Redirigir, limpiar, etc.
           },
           onError: (err) => {
             console.error("PayPal error:", err);
@@ -72,73 +70,77 @@ export default function Checkout() {
   return (
     <>
       <Navbar />
-      <div className="max-w-6xl mx-auto py-12 px-4">
-        <h2 className="text-3xl font-extrabold text-center text-rose-600 mb-10 drop-shadow">
-          Finaliza tu compra 🌴
-        </h2>
+      <div className="w-full bg-gradient-to-br from-[#efebe9] to-[#d7ccc8] py-16 px-6 min-h-screen">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-extrabold text-center text-[#5d4037] mb-10 drop-shadow">
+            Finaliza tu compra 🌴
+          </h2>
 
-        {cartItems.length === 0 ? (
-          <p className="text-center text-gray-600">Tu carrito está vacío.</p>
-        ) : (
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Carrito */}
-            <div className="bg-white/70 backdrop-blur-xl p-6 rounded-3xl shadow-xl">
-              <h3 className="text-2xl font-bold text-pink-600 mb-6">
-                🛒 Tu Carrito
-              </h3>
-              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex justify-between items-center bg-yellow-50 border border-rose-200 rounded-xl p-4 shadow-md"
-                  >
-                    <div className="flex items-center gap-4">
-                      <img
-                        src={item.product.image_url}
-                        alt={item.product.name}
-                        className="h-14 w-14 rounded object-cover border-2 border-pink-200"
-                      />
-                      <div>
-                        <p className="flex font-semibold text-rose-700">
-                          {item.product.name}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Cantidad: {item.quantity}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-amber-700 font-bold">
-                      ${item.product.price * item.quantity}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* PayPal only */}
-            <div className="bg-white/80 backdrop-blur-2xl p-6 rounded-3xl shadow-xl flex flex-col justify-between">
-              <div>
-                <h3 className="text-2xl font-bold text-pink-600 mb-6 text-center">
-                  💳 Pago con PayPal
+          {cartItems.length === 0 ? (
+            <p className="text-center text-[#6d4c41] font-medium">
+              Tu carrito está vacío.
+            </p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Carrito */}
+              <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
+                <h3 className="text-2xl font-bold text-[#4e342e] mb-6">
+                  🛒 Tu Carrito
                 </h3>
-                <p className="text-center text-gray-600 mb-4">
-                  Paga con tarjeta o cuenta PayPal fácilmente.
-                </p>
-                <div className="text-right text-lg font-bold text-rose-500 mb-6">
-                  Total: ${total.toFixed(2)}{" "}
-                  <span className="text-sm text-gray-400">(BZD)</span>
+                <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                  {cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex justify-between items-center bg-[#d7ccc8] border border-[#bcaaa4] rounded-xl p-4 shadow-md"
+                    >
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={item.product.image_url}
+                          alt={item.product.name}
+                          className="h-14 w-14 rounded object-cover border-2 border-[#bcaaa4]"
+                        />
+                        <div>
+                          <p className="flex font-semibold text-[#3e2723]">
+                            {item.product.name}
+                          </p>
+                          <p className="text-sm text-[#5d4037]">
+                            Cantidad: {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-[#5d4037] font-bold">
+                        ${(item.product.price * item.quantity).toFixed(2)} BZD
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="pt-4 border-t">
-                <div
-                  id="paypal-button-container"
-                  className="flex justify-center"
-                />
+              {/* PayPal only */}
+              <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8] flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-[#4e342e] mb-6 text-center">
+                    💳 Pago con PayPal
+                  </h3>
+                  <p className="text-center text-[#6d4c41] mb-4">
+                    Paga con tarjeta o cuenta PayPal fácilmente.
+                  </p>
+                  <div className="text-right text-lg font-bold text-[#3e2723] mb-6">
+                    Total: ${total.toFixed(2)}{" "}
+                    <span className="text-sm text-[#6d4c41]">(BZD)</span>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-[#d7ccc8]">
+                  <div
+                    id="paypal-button-container"
+                    className="flex justify-center"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );

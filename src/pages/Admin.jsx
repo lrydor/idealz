@@ -12,6 +12,11 @@ export default function Admin() {
 
   useEffect(() => {
     const fetchOrders = async () => {
+        
+        
+
+
+
       const { data, error } = await supabase
         .from("cart_items")
         .select(

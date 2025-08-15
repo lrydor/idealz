@@ -31,6 +31,7 @@ export default function Cart() {
     (sum, item) => sum + item.quantity * item.product.price,
     0
   );
+
   const updateQuantity = async (itemId, newQty) => {
     if (newQty < 1) return;
 
@@ -53,65 +54,75 @@ export default function Cart() {
   return (
     <>
       <Navbar />
-      <div className="max-w-4xl mx-auto py-10 px-4">
-        <h1 className="text-4xl font-extrabold mb-8 text-center text-pink-600 drop-shadow-md">
-          Tu Carrito
-        </h1>
+      <div className="w-full bg-gradient-to-br from-[#efebe9] to-[#d7ccc8] py-16 px-6 min-h-screen">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-extrabold mb-8 text-center text-[#5d4037] drop-shadow">
+            Tu Carrito
+          </h1>
 
-        {cartItems.length === 0 ? (
-          <p className="text-center text-gray-600">Tu carrito está vacío.</p>
-        ) : (
-          <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl p-4 border border-rose-100"
-              >
-                <img
-                  src={item.product.image_url}
-                  alt={item.product.name}
-                  className="w-20 h-20 object-cover rounded-2xl border-2 border-yellow-200 shadow-md"
-                />
-                <div className="flex-1">
-                  <h2 className="flex text-lg font-bold text-rose-700">
-                    {item.product.name}
-                  </h2>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
-                    >
-                      -
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
-                    >
-                      +
-                    </button>
+          {cartItems.length === 0 ? (
+            <p className="text-center text-[#6d4c41] font-medium">
+              Tu carrito está vacío.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-4 bg-[#efebe9] rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 p-4 border border-[#d7ccc8]"
+                >
+                  <img
+                    src={item.product.image_url}
+                    alt={item.product.name}
+                    className="w-20 h-20 object-cover rounded-2xl border-2 border-[#d7ccc8] shadow-md"
+                  />
+                  <div className="flex-1">
+                    <h2 className="text-lg font-bold text-[#4e342e]">
+                      {item.product.name}
+                    </h2>
+                    <div className="flex items-center gap-2 mt-1">
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
+                        className="px-2 py-1 bg-[#d7ccc8] text-[#4e342e] rounded hover:bg-[#bcaaa4] transition"
+                      >
+                        -
+                      </button>
+                      <span className="font-medium text-[#3e2723]">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
+                        className="px-2 py-1 bg-[#d7ccc8] text-[#4e342e] rounded hover:bg-[#bcaaa4] transition"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div className="text-right font-bold text-[#5d4037] text-lg">
+                    ${(item.product.price * item.quantity).toFixed(2)} BZD
                   </div>
                 </div>
-                <div className="text-right font-bold text-amber-700 text-lg">
-                  ${(item.product.price * item.quantity).toFixed(2)}
-                </div>
+              ))}
+
+              <div className="text-right text-xl font-bold mt-6 text-[#4e342e] drop-shadow">
+                Total: ${total.toFixed(2)} BZD
               </div>
-            ))}
 
-            <div className="text-right text-xl font-bold mt-6 text-pink-600 drop-shadow-sm">
-              Total: ${total.toFixed(2)}
+              <div className="text-center mt-6">
+                <a
+                  href="/checkout"
+                  className="inline-block bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold px-8 py-3 rounded-full shadow-lg transition"
+                >
+                  Proceder al Pago →
+                </a>
+              </div>
             </div>
-
-            <div className="text-center mt-6">
-              <a
-                href="/checkout"
-                className="inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg transition duration-300"
-              >
-                Proceder al Pago →
-              </a>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );

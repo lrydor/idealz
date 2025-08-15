@@ -48,13 +48,22 @@ export default function Navbar() {
 
           {/* Right section (Desktop) */}
           <div className="hidden md:flex items-center gap-5">
-            <a href="/menu" className="text-[#4e342e] hover:underline font-medium">
+            <a
+              href="/menu"
+              className="text-[#4e342e] hover:underline font-medium"
+            >
               Menú
             </a>
-            <a href="#about" className="text-[#4e342e] hover:underline font-medium">
+            <a
+              href="#about"
+              className="text-[#4e342e] hover:underline font-medium"
+            >
               Sobre Nosotros
             </a>
-            <a href="#contact" className="text-[#4e342e] hover:underline font-medium">
+            <a
+              href="#contact"
+              className="text-[#4e342e] hover:underline font-medium"
+            >
               Contacto
             </a>
 
@@ -95,12 +104,16 @@ export default function Navbar() {
           </div>
 
           {/* Mobile toggle */}
-          <div className="md:hidden">
+          <div className="md:hidden items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="px-3 py-2 rounded text-sm font-medium text-[#6d4c41] hover:bg-[#ede7e3] transition"
             >
-              Menú
+              <img
+                src="https://img.icons8.com/?size=100&id=36389&format=png&color=000000"
+                alt="Menu Icon"
+                className="h-5 w-5 inline-block ml-1"
+              />
             </button>
           </div>
         </div>
@@ -135,10 +148,10 @@ export default function Navbar() {
             onClick={() => {
               navigate("/cart");
             }}
-            className="flex items-center gap-2 text-[#4e342e] hover:bg-[#ede7e3] px-4 py-2 rounded transition"
+            className="w-full flex items-center gap-2 text-[#4e342e] hover:bg-[#ede7e3] px-4 py-2 rounded transition justify-center"
           >
             <img src={cartLogo} alt="Cart" className="h-5 w-5" />
-            Carrito
+            <span className="text-[#4e342e]">Carrito</span>
           </button>
 
           {userName ? (
