@@ -11,7 +11,7 @@ export default function Home() {
       <Hero />
       <div className="space-y-28 px-4 sm:px-8 lg:px-16 py-28">
         <About />
-        <Contact />
+        {/* <Contact /> */}
         <Footer />
       </div>
     </div>

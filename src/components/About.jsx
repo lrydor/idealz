@@ -1,7 +1,7 @@
 import React from "react";
-import fam from "../assets/products/fam.jpeg";
-import ideal from "../assets/products/ideal.jpeg";
-import blz from "../assets/products/blz.jpeg";
+import entrada from "../assets/products/entrada.jpg";
+import laPasadita from "../assets/logo.jpg";
+import costado from "../assets/products/costado.jpg";
 
 const About = () => {
   return (
@@ -18,22 +18,22 @@ const About = () => {
          
           <div className="bg-[#fdf5f0] p-6 rounded-3xl shadow-md flex flex-col items-center hover:shadow-2xl transition-all">
             <img
-              src={ideal}
+              src={entrada}
               alt="Nuestra Misión"
               className="rounded-2xl w-full h-64 object-cover mb-5"
             />
             <h3 className="text-xl font-semibold text-[#6d4c41] mb-2">
-              Nuestra Misión
+              Nuestra Ubicación
             </h3>
             <p className="text-[#5a4033] text-sm leading-relaxed text-center px-2">
-              En <span className="font-bold">Idealz</span>, creemos que la felicidad comienza con una paleta. Nuestro objetivo es simple: brindar alegría en cada bocado con sabores tropicales, frutales y cremosos hechos con amor e ingredientes locales. 💖
+              En <span className="font-bold">La Pasadita</span>, ...
             </p>
           </div>
 
       
           <div className="bg-[#fdf5f0] p-6 rounded-3xl shadow-md flex flex-col items-center hover:shadow-2xl transition-all">
             <img
-              src={fam}
+              src={laPasadita}
               alt="Nuestra Historia"
               className="rounded-2xl w-full h-64 object-cover mb-5"
             />
@@ -41,14 +41,14 @@ const About = () => {
               Nuestra Historia
             </h3>
             <p className="text-[#5a4033] text-sm leading-relaxed text-center px-2">
-              Lo que comenzó como un pequeño sueño familiar en Belice, ahora es el favorito de la comunidad. Combinamos tradición y creatividad para crear helados que sacan sonrisas a cada generación — desde niños hasta abuelitas.
+              Lo que comenzó como un pequeño sueño...
             </p>
           </div>
 
           
           <div className="bg-[#fdf5f0] p-6 rounded-3xl shadow-md flex flex-col items-center hover:shadow-2xl transition-all">
             <img
-              src={blz}
+              src={costado}
               alt="Nuestros Sabores"
               className="rounded-2xl w-full h-64 object-cover mb-5"
             />
@@ -56,7 +56,7 @@ const About = () => {
               Nuestros Sabores
             </h3>
             <p className="text-[#5a4033] text-sm leading-relaxed text-center px-2">
-              Desde <span className="font-bold">Mango</span> y <span className="font-bold">Picafresa</span> hasta nuestra icónica <span className="font-bold">Mangonada</span>, elaboramos cada paleta para endulzar tu día. ¡Ven a refrescarte con nosotros! 🍦🇧🇿
+              Desde <span className="font-bold">Pancakes</span> y <span className="font-bold">Crepas</span> hasta nuestra icónica <span className="font-bold">Alitas bañadas en barbacoa </span>, ...
             </p>
           </div>
         </div>

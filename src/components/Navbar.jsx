@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 
 // logos
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.jpg";
 import cartLogo from "../assets/cart.svg";
 
 export default function Navbar() {

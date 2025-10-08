@@ -1,4 +1,4 @@
-import logo from "../assets/ddlogo.png";
+import logo from "../assets/logo.jpg";
 
 const Footer = () => {
   return (
@@ -31,16 +31,14 @@ const Footer = () => {
             dorran.solis@unadeca.net
           </a>{" "}
           |{" "}
-          <a href="mailto:d.ruiz@unadeca.net" className="hover:underline text-[#6d4c41] hover:text-[#4e342e]">
-            d.ruiz@unadeca.net
+          <a href="mailto:rxulreyes866@gmail.com" className="hover:underline text-[#6d4c41] hover:text-[#4e342e]">
+            rxulreyes866@gmail.com
           </a>
         </p>
       </div>
 
       <p className="text-xs max-w-xl mx-auto text-[#8d6e63]">
-        D&D CREACIÓN es un proyecto creativo hecho para aprender y divertirse.
-        Todos los nombres de productos, logotipos y marcas son propiedad de sus
-        respectivos dueños.
+        WAZAAAAA👻
       </p>
 
       <p className="mt-4 text-xs text-[#a1887f]">

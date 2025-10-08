@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import logo from "../assets/ddlogo.png";
+import logo from "../assets/logo.jpg";
 import { supabase } from "../../supabaseClient";
 
 export default function Grid() {
