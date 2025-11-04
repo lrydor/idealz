@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [statusError, setStatusError] = useState(null);
 
   const fetchCart = async () => {
     const {
@@ -13,7 +15,9 @@ export default function Cart() {
 
     const { data, error } = await supabase
       .from("cart_items")
-      .select("id, quantity, product:product_id (name, price, image_url)")
+      .select(
+        "id, quantity, product_id, product:product_id (id, name, price, image_url)"
+      )
       .eq("user_id", user.id);
 
     if (error) {
@@ -51,6 +55,68 @@ export default function Cart() {
     }
   };
 
+  const clearStatus = () => {
+    setStatusError(null);
+    setStatusMessage(null);
+  };
+
+  const createOrderFromCart = async () => {
+    clearStatus();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setStatusError("Debes iniciar sesión para confirmar tu pedido.");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      setStatusError("Tu carrito está vacío.");
+      return;
+    }
+
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .insert({ user_id: user.id })
+      .select()
+      .single();
+
+    if (orderError) {
+      setStatusError(orderError.message);
+      return;
+    }
+
+    const { error: itemsError } = await supabase
+      .from("order_items")
+      .insert(
+        cartItems.map((item) => ({
+          order_id: order.id,
+          product_id: item.product_id,
+          name: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity,
+        }))
+      );
+
+    if (itemsError) {
+      setStatusError(itemsError.message);
+      return;
+    }
+
+    const { error: deleteError } = await supabase
+      .from("cart_items")
+      .delete()
+      .eq("user_id", user.id);
+
+    if (deleteError) {
+      setStatusError(deleteError.message);
+      return;
+    }
+
+    setStatusMessage("✅ Pedido confirmado correctamente.");
+    setCartItems([]);
+  };
+
   return (
     <>
       <Navbar />
@@ -59,6 +125,17 @@ export default function Cart() {
           <h1 className="text-4xl font-extrabold mb-8 text-center text-[#5d4037] drop-shadow">
             Tu Carrito
           </h1>
+
+          {statusMessage && (
+            <p className="text-center text-green-600 font-medium mb-4">
+              {statusMessage}
+            </p>
+          )}
+          {statusError && (
+            <p className="text-center text-red-500 font-medium mb-4">
+              {statusError}
+            </p>
+          )}
 
           {cartItems.length === 0 ? (
             <p className="text-center text-[#6d4c41] font-medium">
@@ -103,7 +180,7 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="text-right font-bold text-[#5d4037] text-lg">
-                    ${(item.product.price * item.quantity).toFixed(2)} BZD
+                    ${(item.product.price * item.quantity).toFixed(2)} QTG
                   </div>
                 </div>
               ))}
@@ -119,6 +196,12 @@ export default function Cart() {
                 >
                   Proceder al Pago →
                 </a>
+                <button
+                  onClick={createOrderFromCart}
+                  className="ml-3 inline-block bg-[#4e342e] hover:bg-[#3e2723] text-[#efebe9] font-semibold px-8 py-3 rounded-full shadow-lg transition"
+                >
+                  Confirmar Pedido sin Pago
+                </button>
               </div>
             </div>
           )}

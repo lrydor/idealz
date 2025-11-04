@@ -12,8 +12,9 @@ import Grid from "./components/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Admin from "./pages/Admin";
-import UpdatePassword from "./pages/UpdatePassword"; 
-// import Display from "./pages/display";
+import UpdatePassword from "./pages/UpdatePassword";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Orders from "./pages/Orders";
 import DisplayKitchen from "./pages/DisplayKitchen";
 import DisplayQueue from "./pages/DisplayQueue";
 import "./App.css";
@@ -43,7 +44,21 @@ function AppRoutes() {
       <Route path="/menu" element={<Grid />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute
+            allowedRoles={["employee", "admin"]}
+            element={<Orders />}
+          />
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]} element={<Admin />} />
+        }
+      />
       <Route path="/updatePassword" element={<UpdatePassword />} />
       {/* <Route path="/display" element={<Display />} /> */}
       <Route path="/display/kitchen" element={<DisplayKitchen />} />

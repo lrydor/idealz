@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.JPG";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ export default function Login() {
     });
     if (error) {
       setError(error.message);
+      console.error("Supabase login error:", error);
     } else {
       setError(null);
       navigate("/");

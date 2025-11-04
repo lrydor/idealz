@@ -22,4 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.env
 .envw
+idealz_complete_dump.sql
