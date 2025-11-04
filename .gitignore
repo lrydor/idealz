@@ -23,3 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 .env
+idealz_complete_dump.sql

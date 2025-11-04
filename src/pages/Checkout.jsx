@@ -1,32 +1,97 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import Navbar from "../components/Navbar";
+import { useAuth } from "../context/AuthContext";
 
 export default function Checkout() {
   const [cartItems, setCartItems] = useState([]);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [statusError, setStatusError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCart = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
       if (!user) return;
 
       const { data, error } = await supabase
         .from("cart_items")
-        .select("id, quantity, product:product_id (name, price, image_url)")
+        .select(
+          "id, quantity, product_id, product:product_id (id, name, price, image_url)"
+        )
         .eq("user_id", user.id);
 
       if (!error) setCartItems(data);
     };
 
     fetchCart();
-  }, []);
+  }, [user]);
 
   const total = cartItems.reduce(
     (acc, item) => acc + item.quantity * item.product.price,
     0
   );
+
+  const clearStatus = () => {
+    setStatusError(null);
+    setStatusMessage(null);
+  };
+
+  const createOrderFromCart = async () => {
+    clearStatus();
+    if (!user) {
+      setStatusError("Debes iniciar sesión para completar tu pedido.");
+      return null;
+    }
+
+    if (cartItems.length === 0) {
+      setStatusError("No hay productos en el carrito.");
+      return null;
+    }
+
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .insert({ user_id: user.id })
+      .select()
+      .single();
+
+    if (orderError) {
+      setStatusError(orderError.message);
+      return null;
+    }
+
+    const orderId = order.id;
+
+    const { error: itemsError } = await supabase
+      .from("order_items")
+      .insert(
+        cartItems.map((item) => ({
+          order_id: orderId,
+          product_id: item.product_id,
+          name: item.product.name,
+          price: item.product.price,
+          quantity: item.quantity,
+        }))
+      );
+
+    if (itemsError) {
+      setStatusError(itemsError.message);
+      return null;
+    }
+
+    const { error: deleteError } = await supabase
+      .from("cart_items")
+      .delete()
+      .eq("user_id", user.id);
+
+    if (deleteError) {
+      setStatusError(deleteError.message);
+      return null;
+    }
+
+    setCartItems([]);
+    setStatusMessage("✅ Pedido creado correctamente.");
+    return orderId;
+  };
 
   useEffect(() => {
     const renderPayPalButton = () => {
@@ -50,13 +115,19 @@ export default function Checkout() {
           },
           onApprove: async (data, actions) => {
             const details = await actions.order.capture();
-            alert(
+            setStatusMessage(
               `✅ Pago con PayPal completado por ${details.payer.name.given_name}`
             );
+            const orderId = await createOrderFromCart();
+            if (!orderId) {
+              setStatusError(
+                "El pago se procesó pero no se pudo registrar el pedido. Revisa la consola."
+              );
+            }
           },
           onError: (err) => {
             console.error("PayPal error:", err);
-            alert("❌ Hubo un error con PayPal.");
+            setStatusError("❌ Hubo un error con PayPal.");
           },
         })
         .render("#paypal-button-container");
@@ -65,7 +136,7 @@ export default function Checkout() {
     if (window.paypal && cartItems.length > 0) {
       renderPayPalButton();
     }
-  }, [cartItems]);
+  }, [cartItems, total]);
 
   return (
     <>
@@ -75,6 +146,17 @@ export default function Checkout() {
           <h2 className="text-3xl font-extrabold text-center text-[#5d4037] mb-10 drop-shadow">
             Finaliza tu compra 🌴
           </h2>
+
+          {statusMessage && (
+            <div className="mb-6 bg-green-100 border border-green-200 text-green-700 px-4 py-3 rounded relative">
+              {statusMessage}
+            </div>
+          )}
+          {statusError && (
+            <div className="mb-6 bg-red-100 border border-red-200 text-red-700 px-4 py-3 rounded relative">
+              {statusError}
+            </div>
+          )}
 
           {cartItems.length === 0 ? (
             <p className="text-center text-[#6d4c41] font-medium">
@@ -136,6 +218,12 @@ export default function Checkout() {
                     id="paypal-button-container"
                     className="flex justify-center"
                   />
+                  <button
+                    onClick={createOrderFromCart}
+                    className="mt-4 w-full bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-3 rounded-full shadow transition"
+                  >
+                    Registrar Pedido sin PayPal
+                  </button>
                 </div>
               </div>
             </div>

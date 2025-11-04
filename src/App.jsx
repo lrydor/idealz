@@ -12,7 +12,9 @@ import Grid from "./components/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Admin from "./pages/Admin";
-import UpdatePassword from "./pages/UpdatePassword"; // importa tu página de cambio de contraseña
+import Orders from "./pages/Orders";
+import UpdatePassword from "./pages/UpdatePassword";
+import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 
 function AppWrapper() {
@@ -40,7 +42,21 @@ function AppRoutes() {
       <Route path="/menu" element={<Grid />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute
+            allowedRoles={["employee", "admin"]}
+            element={<Orders />}
+          />
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]} element={<Admin />} />
+        }
+      />
       <Route path="/updatePassword" element={<UpdatePassword />} />
     </Routes>
   );

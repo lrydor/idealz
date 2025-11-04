@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { supabase } from "../../supabaseClient";
+import { useAuth } from "../context/AuthContext";
 
 // logos
 import logo from "../assets/logo.jpg";
@@ -9,32 +10,87 @@ import cartLogo from "../assets/cart.svg";
 export default function Navbar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [userName, setUserName] = useState(null);
-
-  useEffect(() => {
-    const fetchUserName = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("first_name")
-          .eq("id", user.id)
-          .single();
-
-        if (profile?.first_name) {
-          setUserName(profile.first_name);
-        }
-      }
-    };
-    fetchUserName();
-  }, []);
+  const { user, role, profile } = useAuth();
+  const userName = profile?.first_name ?? null;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setUserName(null);
     navigate("/");
+  };
+
+  const renderAuthButtons = (isMobile = false) => {
+    if (!user) {
+      return (
+        <>
+          <button
+            className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
+            onClick={() => {
+              if (isMobile) setIsOpen(false);
+              navigate("/login");
+            }}
+          >
+            Login
+          </button>
+          <button
+            className="bg-gradient-to-br from-[#6d4c41] to-[#4e342e] text-[#f5f5f5] font-extrabold px-4 py-2 rounded-full hover:brightness-110 transition"
+            onClick={() => {
+              if (isMobile) setIsOpen(false);
+              navigate("/register");
+            }}
+          >
+            Unirse
+          </button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <span className="text-[#4e342e] font-medium">
+          Hola{userName ? `, ${userName}` : ""}!
+        </span>
+        {(role === "employee" || role === "admin") && (
+          <button
+            className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
+            onClick={() => {
+              if (isMobile) setIsOpen(false);
+              navigate("/orders");
+            }}
+          >
+            Pedidos
+          </button>
+        )}
+        {role === "admin" && (
+          <button
+            className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
+            onClick={() => {
+              if (isMobile) setIsOpen(false);
+              navigate("/admin");
+            }}
+          >
+            Panel
+          </button>
+        )}
+        <button
+          className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
+          onClick={() => {
+            if (isMobile) setIsOpen(false);
+            handleLogout();
+          }}
+        >
+          Logout
+        </button>
+        <button
+          className="flex items-center gap-2 px-3 py-2 border border-[#d7ccc8] rounded-full hover:bg-[#ede7e3] transition"
+          onClick={() => {
+            if (isMobile) setIsOpen(false);
+            navigate("/cart");
+          }}
+        >
+          <img src={cartLogo} alt="Cart" className="h-5 w-5" />
+        </button>
+      </>
+    );
   };
 
   return (
@@ -67,40 +123,7 @@ export default function Navbar() {
               Contacto
             </a>
 
-            {userName ? (
-              <>
-                <span className="text-[#4e342e] font-medium">
-                  Hola, {userName}!
-                </span>
-                <button
-                  className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-                <button
-                  className="flex items-center gap-2 px-3 py-2 border border-[#d7ccc8] rounded-full hover:bg-[#ede7e3] transition"
-                  onClick={() => navigate("/cart")}
-                >
-                  <img src={cartLogo} alt="Cart" className="h-5 w-5" />
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
-                  onClick={() => navigate("/login")}
-                >
-                  Login
-                </button>
-                <button
-                  className="bg-gradient-to-br from-[#6d4c41] to-[#4e342e] text-[#f5f5f5] font-extrabold px-4 py-2 rounded-full hover:brightness-110 transition"
-                  onClick={() => navigate("/register")}
-                >
-                  Unirse
-                </button>
-              </>
-            )}
+            {renderAuthButtons(false)}
           </div>
 
           {/* Mobile toggle */}
@@ -154,43 +177,9 @@ export default function Navbar() {
             <span className="text-[#4e342e]">Carrito</span>
           </button>
 
-          {userName ? (
-            <>
-              <span className="block text-[#4e342e] font-medium">
-                Hola, {userName}!
-              </span>
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  handleLogout();
-                }}
-                className="w-full bg-[#f5f5f5] text-[#4e342e] font-bold py-2 px-6 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="w-full bg-[#f5f5f5] text-[#4e342e] font-bold py-2 px-6 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
-                onClick={() => {
-                  setIsOpen(false);
-                  navigate("/login");
-                }}
-              >
-                Login
-              </button>
-              <button
-                className="w-full bg-gradient-to-br from-[#6d4c41] to-[#4e342e] text-[#f5f5f5] font-bold py-2 px-6 rounded-full hover:brightness-110 transition"
-                onClick={() => {
-                  setIsOpen(false);
-                  navigate("/register");
-                }}
-              >
-                Unirse
-              </button>
-            </>
-          )}
+          <div className="flex flex-col gap-2 mt-4">
+            {renderAuthButtons(true)}
+          </div>
         </div>
       )}
     </nav>

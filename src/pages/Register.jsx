@@ -42,6 +42,9 @@ export default function Register() {
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
+      options: {
+        data: { role: "customer" },
+      },
     });
 
     if (error) {
@@ -59,6 +62,7 @@ export default function Register() {
         email: formData.email,
         first_name: formData.first_name,
         last_name: formData.last_name,
+        role: "customer",
       },
     ]);
 

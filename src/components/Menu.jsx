@@ -109,7 +109,7 @@ export default function Grid() {
               </h3>
               <p className="text-[#5d4037] text-sm mb-3 px-2">{item.desc}</p>
               <p className="text-lg font-semibold text-[#4e342e] mb-4">
-                ${item.price.toFixed(2)} BZD c/u
+                {item.price.toFixed(2)} GTQ c/u
               </p>
               <button
                 className="bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-2 px-6 rounded-full shadow-lg transition"
@@ -122,7 +122,7 @@ export default function Grid() {
         </div>
 
         <div className="text-center mt-16 text-[#6d4c41] font-semibold text-lg">
-          <h1>NOTA: Todos los precios en dolares Beliceños - BZD</h1>
+          <h1>NOTA: Todos los precios en Quetzales - GTQ</h1>
         </div>
       </section>
 
