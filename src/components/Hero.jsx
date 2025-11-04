@@ -8,7 +8,7 @@ export default function Hero() {
         backgroundImage: `url(${costado})`,
       }}
     >
-      <div className="bg-[#ffffffdc] backdrop-blur-sm p-10 rounded-3xl shadow-2xl max-w-4xl w-full text-center border border-[#d7ccc8]">
+      <div className="bg-[#ffffffdc] backdrop-blur-sm p-10 rounded-3xl shadow-2xl max-w-4xl w-full text-center border border-[rgb(215,204,200)]">
         <h2 className="text-5xl sm:text-6xl font-serif text-[#4e342e] mb-6 drop-shadow-md tracking-wide">
           Bienvenidos a La Pasadita 
         </h2>

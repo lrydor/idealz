@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import Navbar from "../components/Navbar";
+import CheckoutLocal from "../pages/CheckoutLocal";
 
 export default function Checkout() {
   const [cartItems, setCartItems] = useState([]);
 
+  const fetchCart = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setCartItems([]);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("cart_items")
+      .select(
+        "id, quantity, product:product_id (name, price, image_url)"
+      )
+      .eq("user_id", user.id);
+
+    if (!error) setCartItems(data || []);
+  };
+
   useEffect(() => {
-    const fetchCart = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from("cart_items")
-        .select("id, quantity, product:product_id (name, price, image_url)")
-        .eq("user_id", user.id);
-
-      if (!error) setCartItems(data);
-    };
-
     fetchCart();
   }, []);
 
@@ -28,6 +34,7 @@ export default function Checkout() {
     0
   );
 
+  // Render del botón de PayPal
   useEffect(() => {
     const renderPayPalButton = () => {
       const container = document.getElementById("paypal-button-container");
@@ -53,6 +60,7 @@ export default function Checkout() {
             alert(
               `✅ Pago con PayPal completado por ${details.payer.name.given_name}`
             );
+            // Aquí podrías crear la orden con payment_method='PAYPAL' en BD si lo requieres.
           },
           onError: (err) => {
             console.error("PayPal error:", err);
@@ -65,7 +73,7 @@ export default function Checkout() {
     if (window.paypal && cartItems.length > 0) {
       renderPayPalButton();
     }
-  }, [cartItems]);
+  }, [cartItems, total]);
 
   return (
     <>
@@ -116,25 +124,41 @@ export default function Checkout() {
                 </div>
               </div>
 
-              {/* PayPal only */}
-              <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8] flex flex-col justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold text-[#4e342e] mb-6 text-center">
+              {/* Métodos de pago */}
+              <div className="flex flex-col gap-6">
+                {/* PayPal */}
+                <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
+                  <h3 className="text-2xl font-bold text-[#4e342e] mb-4 text-center">
                     💳 Pago con PayPal
                   </h3>
                   <p className="text-center text-[#6d4c41] mb-4">
-                    Paga con tarjeta o cuenta PayPal fácilmente.
+                    Paga con tarjeta o cuenta PayPal.
                   </p>
-                  <div className="text-right text-lg font-bold text-[#3e2723] mb-6">
+                  <div className="text-right text-lg font-bold text-[#3e2723] mb-4">
                     Total: ${total.toFixed(2)}{" "}
                     <span className="text-sm text-[#6d4c41]">(BZD)</span>
                   </div>
+                  <div id="paypal-button-container" className="flex justify-center" />
                 </div>
 
-                <div className="pt-4 border-t border-[#d7ccc8]">
-                  <div
-                    id="paypal-button-container"
-                    className="flex justify-center"
+                {/* Pago en el lugar */}
+                <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
+                  <h3 className="text-2xl font-bold text-[#4e342e] mb-2 text-center">
+                    💵 Pago en el lugar
+                  </h3>
+                  <p className="text-center text-[#6d4c41] mb-4">
+                    Confirma ahora y pagas al recoger en caja.
+                  </p>
+                  <div className="text-right text-lg font-bold text-[#3e2723] mb-4">
+                    Total: ${total.toFixed(2)}{" "}
+                    <span className="text-sm text-[#6d4c41]">(BZD)</span>
+                  </div>
+
+                  <CheckoutLocal
+                    onSuccess={async (orderId) => {
+                      await fetchCart(); // el RPC limpia el carrito; aquí refrescamos UI
+                      alert(`✅ Orden creada para pago en sitio.\nID: ${orderId}`);
+                    }}
                   />
                 </div>
               </div>

@@ -12,7 +12,10 @@ import Grid from "./components/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Admin from "./pages/Admin";
-import UpdatePassword from "./pages/UpdatePassword"; // importa tu página de cambio de contraseña
+import UpdatePassword from "./pages/UpdatePassword"; 
+// import Display from "./pages/display";
+import DisplayKitchen from "./pages/DisplayKitchen";
+import DisplayQueue from "./pages/DisplayQueue";
 import "./App.css";
 
 function AppWrapper() {
@@ -42,6 +45,9 @@ function AppRoutes() {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/updatePassword" element={<UpdatePassword />} />
+      {/* <Route path="/display" element={<Display />} /> */}
+      <Route path="/display/kitchen" element={<DisplayKitchen />} />
+      <Route path="/display/queue" element={<DisplayQueue />} />
     </Routes>
   );
 }
