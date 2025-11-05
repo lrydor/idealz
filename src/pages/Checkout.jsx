@@ -10,34 +10,29 @@ export default function Checkout() {
   const [statusError, setStatusError] = useState(null);
   const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      if (!user) return;
+  // 🔹 Obtener el carrito del usuario
   const fetchCart = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
     if (!user) {
       setCartItems([]);
       return;
     }
 
-      const { data, error } = await supabase
-        .from("cart_items")
-        .select(
-          "id, quantity, product_id, product:product_id (id, name, price, image_url)"
-        )
-        .eq("user_id", user.id);
     const { data, error } = await supabase
       .from("cart_items")
       .select(
-        "id, quantity, product:product_id (name, price, image_url)"
+        "id, quantity, product_id, product:product_id (id, name, price, image_url)"
       )
       .eq("user_id", user.id);
 
-    if (!error) setCartItems(data || []);
+    if (error) {
+      console.error("Error al obtener carrito:", error.message);
+      setCartItems([]);
+    } else {
+      setCartItems(data || []);
+    }
   };
 
+  // 🔹 Cargar carrito cuando cambia el usuario
   useEffect(() => {
     fetchCart();
   }, [user]);
@@ -52,8 +47,10 @@ export default function Checkout() {
     setStatusMessage(null);
   };
 
+  // 🔹 Crear pedido desde el carrito
   const createOrderFromCart = async () => {
     clearStatus();
+
     if (!user) {
       setStatusError("Debes iniciar sesión para completar tu pedido.");
       return null;
@@ -109,12 +106,11 @@ export default function Checkout() {
     return orderId;
   };
 
+  // 🔹 Renderizar botón de PayPal
   useEffect(() => {
     const renderPayPalButton = () => {
       const container = document.getElementById("paypal-button-container");
-      if (container) {
-        container.innerHTML = "";
-      }
+      if (container) container.innerHTML = "";
 
       window.paypal
         .Buttons({
@@ -122,9 +118,7 @@ export default function Checkout() {
             return actions.order.create({
               purchase_units: [
                 {
-                  amount: {
-                    value: total.toFixed(2),
-                  },
+                  amount: { value: total.toFixed(2) },
                 },
               ],
             });
@@ -154,6 +148,7 @@ export default function Checkout() {
     }
   }, [cartItems, total]);
 
+  // 🔹 Render principal
   return (
     <>
       <Navbar />
@@ -180,7 +175,7 @@ export default function Checkout() {
             </p>
           ) : (
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Carrito */}
+              {/* 🛒 Carrito */}
               <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
                 <h3 className="text-2xl font-bold text-[#4e342e] mb-6">
                   🛒 Tu Carrito
@@ -214,7 +209,7 @@ export default function Checkout() {
                 </div>
               </div>
 
-              {/* Métodos de pago */}
+              {/* 💳 Métodos de pago */}
               <div className="flex flex-col gap-6">
                 {/* PayPal */}
                 <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
@@ -228,7 +223,10 @@ export default function Checkout() {
                     Total: ${total.toFixed(2)}{" "}
                     <span className="text-sm text-[#6d4c41]">(BZD)</span>
                   </div>
-                  <div id="paypal-button-container" className="flex justify-center" />
+                  <div
+                    id="paypal-button-container"
+                    className="flex justify-center"
+                  />
                 </div>
 
                 {/* Pago en el lugar */}
@@ -246,7 +244,7 @@ export default function Checkout() {
 
                   <CheckoutLocal
                     onSuccess={async (orderId) => {
-                      await fetchCart(); // el RPC limpia el carrito; aquí refrescamos UI
+                      await fetchCart(); // limpiar carrito tras crear orden
                       alert(`✅ Orden creada para pago en sitio.\nID: ${orderId}`);
                     }}
                   />
