@@ -54,7 +54,7 @@ export default function Navbar() {
             className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
             onClick={() => {
               if (isMobile) setIsOpen(false);
-              navigate("/orders");
+              navigate("/displaykitchen");
             }}
           >
             Pedidos
@@ -71,6 +71,18 @@ export default function Navbar() {
             Panel
           </button>
         )}
+         {/* Fila */}
+        <button
+            className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
+            onClick={() => {
+              if (isMobile) setIsOpen(false);
+              navigate("/displayqueue");
+            }}
+          >
+            Fila
+          </button>
+          
+
         <button
           className="bg-[#f5f5f5] text-[#4e342e] font-semibold px-4 py-2 rounded-full border border-[#d7ccc8] hover:bg-[#ede7e3] transition"
           onClick={() => {

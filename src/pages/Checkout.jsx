@@ -202,7 +202,7 @@ export default function Checkout() {
                         </div>
                       </div>
                       <p className="text-[#5d4037] font-bold">
-                        ${(item.product.price * item.quantity).toFixed(2)} BZD
+                        ${(item.product.price * item.quantity).toFixed(2)} GTQ
                       </p>
                     </div>
                   ))}
@@ -221,7 +221,7 @@ export default function Checkout() {
                   </p>
                   <div className="text-right text-lg font-bold text-[#3e2723] mb-4">
                     Total: ${total.toFixed(2)}{" "}
-                    <span className="text-sm text-[#6d4c41]">(BZD)</span>
+                    <span className="text-sm text-[#6d4c41]">(GTQ)</span>
                   </div>
                   <div
                     id="paypal-button-container"
@@ -239,7 +239,7 @@ export default function Checkout() {
                   </p>
                   <div className="text-right text-lg font-bold text-[#3e2723] mb-4">
                     Total: ${total.toFixed(2)}{" "}
-                    <span className="text-sm text-[#6d4c41]">(BZD)</span>
+                    <span className="text-sm text-[#6d4c41]">(GTQ)</span>
                   </div>
 
                   <CheckoutLocal

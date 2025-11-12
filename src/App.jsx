@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import Grid from "./components/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import CheckoutLocal from "./pages/CheckoutLocal";
 import Admin from "./pages/Admin";
 import UpdatePassword from "./pages/UpdatePassword";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -44,6 +45,8 @@ function AppRoutes() {
       <Route path="/menu" element={<Grid />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/checkoutlocal" element={<CheckoutLocal />} />
+      <Route path="/checkout/local" element={<CheckoutLocal />} />
       <Route
         path="/orders"
         element={
@@ -61,7 +64,9 @@ function AppRoutes() {
       />
       <Route path="/updatePassword" element={<UpdatePassword />} />
       {/* <Route path="/display" element={<Display />} /> */}
+      <Route path="/displaykitchen" element={<DisplayKitchen />} />
       <Route path="/display/kitchen" element={<DisplayKitchen />} />
+      <Route path="/displayqueue" element={<DisplayQueue />} />
       <Route path="/display/queue" element={<DisplayQueue />} />
     </Routes>
   );

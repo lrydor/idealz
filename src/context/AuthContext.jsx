@@ -1,98 +1,157 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { supabase } from "../../supabaseClient";
 
-const AuthContext = createContext({
+const defaultContextValue = {
   user: null,
   role: null,
   profile: null,
   loading: true,
+  refresh: async () => {},
+  signOut: async () => {},
+};
+
+const AuthContext = createContext(defaultContextValue);
+
+const createEmptyState = (loading = false) => ({
+  user: null,
+  role: null,
+  profile: null,
+  loading,
 });
 
 export function AuthProvider({ children }) {
-  const [state, setState] = useState({
-    user: null,
-    role: null,
-    profile: null,
-    loading: true,
-  });
+  const [state, setState] = useState(() => createEmptyState(true));
+  const isMountedRef = useRef(false);
 
-  useEffect(() => {
-    async function load() {
-      try {
+  const refresh = useCallback(async () => {
+    if (!isMountedRef.current) return;
+
+    setState((prev) => ({ ...prev, loading: true }));
+
+    try {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        throw sessionError;
+      }
+
+      const user = session?.user ?? null;
+
+      if (!user) {
+        if (!isMountedRef.current) return;
+        setState(createEmptyState(false));
+        return;
+      }
+
+      const defaultRole = user.user_metadata?.role ?? "customer";
+      const defaultProfile = {
+        id: user.id,
+        email: user.email ?? "",
+        role: defaultRole,
+        first_name: user.user_metadata?.first_name ?? "",
+        last_name: user.user_metadata?.last_name ?? "",
+      };
+
+      const {
+        data: existingProfile,
+        error: profileError,
+      } = await supabase
+        .from("profiles")
+        .select("id, email, role, first_name, last_name")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profileError && profileError.code !== "PGRST116") {
+        console.warn("Error loading profile:", profileError.message);
+      }
+
+      let profileData = existingProfile ?? null;
+
+      if (!profileData) {
         const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) {
-          setState({
-            user: null,
-            role: null,
-            profile: null,
-            loading: false,
-          });
-          return;
-        }
-
-        const defaultRole = user?.user_metadata?.role ?? "customer";
-        const defaultProfile = {
-          id: user.id,
-          email: user.email,
-          role: defaultRole,
-          first_name: user.user_metadata?.first_name ?? "",
-          last_name: user.user_metadata?.last_name ?? "",
-        };
-
-        let profileResponse = await supabase
+          data: insertedProfile,
+          error: insertError,
+        } = await supabase
           .from("profiles")
-          .select("role, first_name")
-          .eq("id", user.id)
+          .upsert(defaultProfile)
+          .select("id, email, role, first_name, last_name")
           .single();
 
-        if (profileResponse.error) {
-          if (profileResponse.error.code === "PGRST116") {
-            const { data: insertedProfile, error: insertError } = await supabase
-              .from("profiles")
-              .upsert(defaultProfile)
-              .select("role, first_name")
-              .single();
-
-            if (insertError) {
-              console.warn("Error creating profile:", insertError.message);
-            } else {
-              profileResponse = { data: insertedProfile };
-            }
-          } else {
-            console.warn("Error loading profile:", profileResponse.error.message);
-          }
+        if (insertError) {
+          console.warn("Error creating profile:", insertError.message);
+        } else {
+          profileData = insertedProfile;
         }
-
-        setState({
-          user,
-          role:
-            profileResponse.data?.role ??
-            user?.user_metadata?.role ??
-            "customer",
-          profile: profileResponse.data ?? null,
-          loading: false,
-        });
-      } catch (err) {
-        console.error("Error loading auth state:", err);
-        setState({
-          user: null,
-          role: null,
-          profile: null,
-          loading: false,
-        });
       }
-    }
-    load();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(() => load());
-    return () => listener.subscription.unsubscribe();
+      const mergedProfile = {
+        ...defaultProfile,
+        ...(profileData ?? {}),
+      };
+
+      if (!isMountedRef.current) return;
+
+      setState({
+        user,
+        role: mergedProfile.role ?? defaultRole,
+        profile: mergedProfile,
+        loading: false,
+      });
+    } catch (err) {
+      console.error("Error loading auth state:", err);
+      if (!isMountedRef.current) return;
+      setState(createEmptyState(false));
+    }
   }, []);
 
-  return (
-    <AuthContext.Provider value={state}>{children}</AuthContext.Provider>
+  const handleSignOut = useCallback(async () => {
+    await supabase.auth.signOut();
+    if (!isMountedRef.current) return;
+    setState(createEmptyState(false));
+  }, []);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    refresh();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (!isMountedRef.current) return;
+        if (!session?.user) {
+          setState(createEmptyState(false));
+          return;
+        }
+        refresh();
+      }
+    );
+
+    return () => {
+      isMountedRef.current = false;
+      listener?.subscription?.unsubscribe();
+    };
+  }, [refresh]);
+
+  const value = useMemo(
+    () => ({
+      ...state,
+      refresh,
+      signOut: handleSignOut,
+    }),
+    [state, refresh, handleSignOut]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
