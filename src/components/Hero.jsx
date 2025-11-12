@@ -1,4 +1,4 @@
-import costado from "../assets/products/costado.jpg";
+import costado from "../assets/products/costado.JPG";
 
 export default function Hero() {
   return (

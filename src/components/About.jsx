@@ -1,7 +1,7 @@
 import React from "react";
 import entrada from "../assets/products/entrada.jpg";
 import laPasadita from "../assets/logo.JPG";
-import costado from "../assets/products/costado.jpg";
+import costado from "../assets/products/costado.JPG";
 
 const About = () => {
   return (
