@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.JPG";
 
 export default function Register() {
   const navigate = useNavigate();
