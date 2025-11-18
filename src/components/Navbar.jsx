@@ -2,9 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { useAuth } from "../context/AuthContext";
-
-// logos
-import logo from "../assets/logo.jpg";
+import logo from "../assets/logo.JPG";
 import cartLogo from "../assets/cart.svg";
 
 export default function Navbar() {
