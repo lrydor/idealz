@@ -135,7 +135,7 @@ export default function DisplayKitchen() {
                   <li key={o.id} className="rounded-xl border p-3">
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-[#6d4c41]">
-                        #{o.id.slice(0, 8)} · ${Number(o.total).toFixed(2)} BZD
+                        #{o.id.slice(0, 8)} · {Number(o.total).toFixed(2)} GTQ
                       </div>
                       <span className="text-xs px-4 py-2 rounded-full bg-[#d7ccc8] text-[#3e2723]">
                         Mesa {o.table_number}

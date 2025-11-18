@@ -57,7 +57,7 @@ export default function DisplayQueue() {
                 <li key={o.id} className="rounded-xl border p-3">
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-[#6d4c41]">
-                       ${Number(o.total).toFixed(2)} BZD
+                      {Number(o.total).toFixed(2)} GTQ
                     </div>
                     <div className="flex gap-2 items-center">
                       {o.table_number && (

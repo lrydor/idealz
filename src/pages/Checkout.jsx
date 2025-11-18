@@ -4,6 +4,10 @@ import Navbar from "../components/Navbar";
 import CheckoutLocal from "../pages/CheckoutLocal";
 import { useAuth } from "../context/AuthContext";
 
+const GTQ_PER_USD = 7.7; // 1 USD ≈ 7.8 GTQ
+const convertGtqToUsd = (amountGtq) =>
+  Number((amountGtq / GTQ_PER_USD).toFixed(2));
+
 export default function Checkout() {
   const [cartItems, setCartItems] = useState([]);
   const [statusMessage, setStatusMessage] = useState(null);
@@ -41,6 +45,7 @@ export default function Checkout() {
     (acc, item) => acc + item.quantity * item.product.price,
     0
   );
+  const totalUsd = convertGtqToUsd(total);
 
   const clearStatus = () => {
     setStatusError(null);
@@ -102,7 +107,7 @@ export default function Checkout() {
     }
 
     setCartItems([]);
-    setStatusMessage("✅ Pedido creado correctamente.");
+    setStatusMessage("Pedido creado correctamente.");
     return orderId;
   };
 
@@ -118,7 +123,10 @@ export default function Checkout() {
             return actions.order.create({
               purchase_units: [
                 {
-                  amount: { value: total.toFixed(2) },
+                  amount: {
+                    currency_code: "USD",
+                    value: totalUsd.toFixed(2),
+                  },
                 },
               ],
             });
@@ -126,7 +134,7 @@ export default function Checkout() {
           onApprove: async (data, actions) => {
             const details = await actions.order.capture();
             setStatusMessage(
-              `✅ Pago con PayPal completado por ${details.payer.name.given_name}`
+              `Pago con PayPal completado por ${details.payer.name.given_name}`
             );
             const orderId = await createOrderFromCart();
             if (!orderId) {
@@ -137,7 +145,7 @@ export default function Checkout() {
           },
           onError: (err) => {
             console.error("PayPal error:", err);
-            setStatusError("❌ Hubo un error con PayPal.");
+            setStatusError("Hubo un error con PayPal.");
           },
         })
         .render("#paypal-button-container");
@@ -146,7 +154,7 @@ export default function Checkout() {
     if (window.paypal && cartItems.length > 0) {
       renderPayPalButton();
     }
-  }, [cartItems, total]);
+  }, [cartItems, totalUsd]);
 
   // 🔹 Render principal
   return (
@@ -155,7 +163,7 @@ export default function Checkout() {
       <div className="w-full bg-gradient-to-br from-[#efebe9] to-[#d7ccc8] py-16 px-6 min-h-screen">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-extrabold text-center text-[#5d4037] mb-10 drop-shadow">
-            Finaliza tu compra 🌴
+            Finaliza tu compra
           </h2>
 
           {statusMessage && (
@@ -178,7 +186,7 @@ export default function Checkout() {
               {/* 🛒 Carrito */}
               <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
                 <h3 className="text-2xl font-bold text-[#4e342e] mb-6">
-                  🛒 Tu Carrito
+                  Tu Carrito
                 </h3>
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
                   {cartItems.map((item) => (
@@ -196,13 +204,13 @@ export default function Checkout() {
                           <p className="flex font-semibold text-[#3e2723]">
                             {item.product.name}
                           </p>
-                          <p className="text-sm text-[#5d4037]">
+                          <p className="text-sm flex text-[#5d4037]">
                             Cantidad: {item.quantity}
                           </p>
                         </div>
                       </div>
                       <p className="text-[#5d4037] font-bold">
-                        ${(item.product.price * item.quantity).toFixed(2)} GTQ
+                        {(item.product.price * item.quantity).toFixed(2)} GTQ
                       </p>
                     </div>
                   ))}
@@ -214,14 +222,16 @@ export default function Checkout() {
                 {/* PayPal */}
                 <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
                   <h3 className="text-2xl font-bold text-[#4e342e] mb-4 text-center">
-                    💳 Pago con PayPal
+                    Pago con PayPal
                   </h3>
                   <p className="text-center text-[#6d4c41] mb-4">
                     Paga con tarjeta o cuenta PayPal.
                   </p>
                   <div className="text-right text-lg font-bold text-[#3e2723] mb-4">
-                    Total: ${total.toFixed(2)}{" "}
-                    <span className="text-sm text-[#6d4c41]">(GTQ)</span>
+                    <div>Total: {total.toFixed(2)} GTQ</div>
+                    <span className="text-sm text-[#6d4c41]">
+                      PayPal procesa: {totalUsd.toFixed(2)} USD
+                    </span>
                   </div>
                   <div
                     id="paypal-button-container"
@@ -232,20 +242,19 @@ export default function Checkout() {
                 {/* Pago en el lugar */}
                 <div className="bg-[#efebe9] p-6 rounded-3xl shadow-xl border border-[#d7ccc8]">
                   <h3 className="text-2xl font-bold text-[#4e342e] mb-2 text-center">
-                    💵 Pago en el lugar
+                    Pago en el lugar
                   </h3>
                   <p className="text-center text-[#6d4c41] mb-4">
                     Confirma ahora y pagas al recoger en caja.
                   </p>
                   <div className="text-right text-lg font-bold text-[#3e2723] mb-4">
-                    Total: ${total.toFixed(2)}{" "}
-                    <span className="text-sm text-[#6d4c41]">(GTQ)</span>
+                    Total: {total.toFixed(2)} GTQ
                   </div>
 
                   <CheckoutLocal
                     onSuccess={async (orderId) => {
                       await fetchCart(); // limpiar carrito tras crear orden
-                      alert(`✅ Orden creada para pago en sitio.\nID: ${orderId}`);
+                      alert(`Orden creada para pago en sitio.\nID: ${orderId}`);
                     }}
                   />
                   <button

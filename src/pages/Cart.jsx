@@ -113,7 +113,7 @@ export default function Cart() {
       return;
     }
 
-    setStatusMessage("✅ Pedido confirmado correctamente.");
+    setStatusMessage("Pedido confirmado correctamente.");
     setCartItems([]);
   };
 
@@ -180,13 +180,13 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="text-right font-bold text-[#5d4037] text-lg">
-                    ${(item.product.price * item.quantity).toFixed(2)} QTG
+                    {(item.product.price * item.quantity).toFixed(2)} GTQ
                   </div>
                 </div>
               ))}
 
               <div className="text-right text-xl font-bold mt-6 text-[#4e342e] drop-shadow">
-                Total: ${total.toFixed(2)} BZD
+                Total: {total.toFixed(2)} GTQ
               </div>
 
               <div className="text-center mt-6">
