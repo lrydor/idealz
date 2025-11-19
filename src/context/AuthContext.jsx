@@ -116,9 +116,32 @@ export function AuthProvider({ children }) {
   }, []);
 
   const handleSignOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    // Limpiar el estado local primero
     if (!isMountedRef.current) return;
     setState(createEmptyState(false));
+    
+    // Intentar limpiar la sesión en Supabase de forma silenciosa
+    try {
+      // Limpiar el almacenamiento local directamente
+      if (typeof window !== 'undefined') {
+        // Limpiar localStorage relacionado con Supabase
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.includes('supabase') || key.includes('sb-'))) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+      }
+      
+      // Intentar signOut pero ignorar errores
+      await supabase.auth.signOut({ scope: 'local' }).catch(() => {
+        // Ignorar errores silenciosamente
+      });
+    } catch (err) {
+      // Ignorar todos los errores - ya limpiamos el estado local
+    }
   }, []);
 
   useEffect(() => {
