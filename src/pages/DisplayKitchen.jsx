@@ -29,12 +29,53 @@ export default function DisplayKitchen() {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "orders" },
-        (payload) => {
+        async (payload) => {
           const row = payload.new ?? payload.old;
           const visible =
             VISIBLE.includes(row.status) &&
             row.payment_method === "PAGO_LOCAL" &&
             row.table_number !== null;
+
+          // Si es un UPDATE, recargar los datos completos de la orden para obtener order_items y asegurar sincronización
+          if (payload.eventType === "UPDATE") {
+            const wasVisible = VISIBLE.includes(payload.old?.status) && 
+                              payload.old?.payment_method === "PAGO_LOCAL" && 
+                              payload.old?.table_number !== null;
+            const isVisible = visible;
+            
+            if (isVisible || wasVisible) {
+              const { data: fullOrder } = await supabase
+                .from("orders")
+                .select(
+                  "id, status, total, created_at, table_number, payment_method, order_items(name, quantity)"
+                )
+                .eq("id", row.id)
+                .single();
+
+              if (fullOrder) {
+                const shouldBeVisible = VISIBLE.includes(fullOrder.status) &&
+                                       fullOrder.payment_method === "PAGO_LOCAL" &&
+                                       fullOrder.table_number !== null;
+
+                setOrders((prev) => {
+                  let next = [...prev];
+                  const i = next.findIndex((o) => o.id === fullOrder.id);
+                  if (i >= 0) {
+                    if (shouldBeVisible) {
+                      next[i] = fullOrder;
+                    } else {
+                      next.splice(i, 1);
+                    }
+                  } else if (shouldBeVisible) {
+                    next = [...next, fullOrder];
+                  }
+                  next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                  return next;
+                });
+                return;
+              }
+            }
+          }
 
           setOrders((prev) => {
             let next = [...prev];
@@ -46,9 +87,14 @@ export default function DisplayKitchen() {
             } else if (payload.eventType === "UPDATE") {
               const i = next.findIndex((o) => o.id === row.id);
               if (i >= 0) {
-                if (visible) next[i] = { ...next[i], ...row };
-                else next.splice(i, 1);
-              } else if (visible) next = [...next, row];
+                if (visible) {
+                  next[i] = { ...next[i], ...row };
+                  next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                } else next.splice(i, 1);
+              } else if (visible) {
+                next = [...next, row];
+                next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+              }
             } else if (payload.eventType === "DELETE") {
               next = next.filter((o) => o.id !== row.id);
             }
@@ -70,10 +116,8 @@ export default function DisplayKitchen() {
     const idx = VISIBLE.indexOf(current);
     if (idx < 0) return current;
     if (idx < VISIBLE.length - 1) return VISIBLE[idx + 1];
-    return VISIBLE[idx]; // se queda en LISTO
+    return VISIBLE[idx]; 
 
-    // 🔸 OPCIONAL: si quieres que después de LISTO pase a ENTREGADO
-    // return idx === VISIBLE.length - 1 ? "ENTREGADO" : VISIBLE[idx + 1];
   };
 
   // Función para cambiar el estado del pedido
@@ -83,24 +127,89 @@ export default function DisplayKitchen() {
 
     setBusy((b) => ({ ...b, [order.id]: true }));
 
-    // UI optimista
-    const prevOrders = orders;
+    // Actualización optimista inmediata para mejor UX
     setOrders((curr) =>
       curr.map((o) => (o.id === order.id ? { ...o, status: next } : o))
     );
-
-    const { error } = await supabase
-      .from("orders")
-      .update({ status: next })
-      .eq("id", order.id);
-
-    if (error) {
-      setOrders(prevOrders); // revertir
-      alert("No se pudo actualizar el estado. Intenta de nuevo.");
-      console.error(error.message);
+    
+    // Si la orden va a pasar a LISTO, verificar si ya hay 4 órdenes en LISTO
+    if (next === "LISTO") {
+      const readyOrders = orders.filter((o) => o.status === "LISTO");
+      if (readyOrders.length >= 4) {
+        // Encontrar la orden más antigua en LISTO y cambiarla a ENTREGADO
+        const oldestReady = readyOrders.sort(
+          (a, b) => new Date(a.created_at) - new Date(b.created_at)
+        )[0];
+        
+        // Actualizar la orden más antigua a ENTREGADO
+        await supabase
+          .from("orders")
+          .update({ status: "ENTREGADO" })
+          .eq("id", oldestReady.id);
+      }
     }
 
-    setBusy((b) => ({ ...b, [order.id]: false }));
+    // Actualizar en la base de datos
+    console.log("Actualizando orden:", { id: order.id, from: order.status, to: next });
+    
+    // Intentar primero con función RPC si existe, sino usar update directo
+    let updateError = null;
+    
+    // Intentar con función RPC (si existe)
+    const { error: rpcError } = await supabase.rpc("update_order_status", {
+      p_order_id: order.id,
+      p_new_status: next
+    });
+
+    if (rpcError) {
+      // Si la función RPC no existe o falla, intentar update directo
+      console.log("Función RPC no disponible, usando update directo:", rpcError.message);
+      const { error } = await supabase
+        .from("orders")
+        .update({ status: next })
+        .eq("id", order.id);
+
+      updateError = error;
+    } else {
+      console.log("Actualización exitosa usando función RPC");
+    }
+
+    if (updateError) {
+      // Revertir la actualización optimista en caso de error
+      setOrders((curr) =>
+        curr.map((o) => (o.id === order.id ? { ...o, status: order.status } : o))
+      );
+      alert("No se pudo actualizar el estado. Intenta de nuevo.");
+      console.error("Error actualizando estado:", updateError);
+      setBusy((b) => ({ ...b, [order.id]: false }));
+      return;
+    }
+
+    setTimeout(async () => {
+      const { data: verifyOrder, error: verifyError } = await supabase
+        .from("orders")
+        .select("id, status")
+        .eq("id", order.id)
+        .single();
+      
+      if (verifyError) {
+        console.error("Error al verificar el estado:", verifyError);
+        setBusy((b) => ({ ...b, [order.id]: false }));
+        return;
+      }
+
+      if (verifyOrder) {
+        console.log("Estado verificado en BD:", verifyOrder.status, "Esperado:", next);
+        if (verifyOrder.status !== next) {
+          console.error(" El estado NO se guardó correctamente! Esperado:", next, "Actual:", verifyOrder.status);
+          setOrders((curr) =>
+            curr.map((o) => (o.id === order.id ? { ...o, status: verifyOrder.status } : o))
+          );
+          alert("El estado no se pudo guardar. Por favor, crea la función RPC 'update_order_status' en Supabase o ajusta las políticas RLS.");
+        } 
+      }
+      setBusy((b) => ({ ...b, [order.id]: false }));
+    }, 1000);
   };
 
   const labelForNext = (s) => {
@@ -116,6 +225,32 @@ export default function DisplayKitchen() {
     return "bg-[#4e342e] hover:bg-[#3e2723] text-white";
   };
 
+  const clearReadyScreen = async () => {
+    const readyOrders = orders.filter((o) => o.status === "LISTO");
+    
+    if (readyOrders.length === 0) {
+      return;
+    }
+
+    const orderIds = readyOrders.map((o) => o.id);
+    
+    for (const orderId of orderIds) {
+      const { error: rpcError } = await supabase.rpc("update_order_status", {
+        p_order_id: orderId,
+        p_new_status: "ENTREGADO"
+      });
+
+      if (rpcError) {
+        await supabase
+          .from("orders")
+          .update({ status: "ENTREGADO" })
+          .eq("id", orderId);
+      }
+    }
+
+    await load();
+  };
+
   return (
     <div className="min-h-screen bg-[#efebe9] p-6">
       <h1 className="text-4xl font-extrabold text-[#5d4037] mb-6">
@@ -123,14 +258,30 @@ export default function DisplayKitchen() {
       </h1>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {VISIBLE.map((state) => (
+        {VISIBLE.map((state) => {
+          const stateOrders = orders.filter((o) => o.status === state);
+          const showClearButton = state === "LISTO" && stateOrders.length > 0;
+          
+          return (
           <section key={state} className="bg-white rounded-2xl shadow p-4">
-            <h2 className="text-xl font-bold text-[#4e342e] mb-3">
-              {state.replace("_", " ")}
-            </h2>
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-xl font-bold text-[#4e342e]">
+                {state.replace("_", " ")}
+              </h2>
+              {showClearButton && (
+                <button
+                  onClick={clearReadyScreen}
+                  className="text-xs px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition font-semibold"
+                  title="Limpiar pantalla - Mover todas las órdenes a ENTREGADO"
+                >
+                   Limpiar
+                </button>
+              )}
+            </div>
             <ul className="space-y-3">
               {orders
                 .filter((o) => o.status === state)
+                .slice(0, state === "LISTO" ? 4 : undefined)
                 .map((o) => (
                   <li key={o.id} className="rounded-xl border p-3">
                     <div className="flex justify-between items-center">
@@ -167,7 +318,8 @@ export default function DisplayKitchen() {
                 ))}
             </ul>
           </section>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
