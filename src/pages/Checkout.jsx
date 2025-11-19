@@ -257,12 +257,6 @@ export default function Checkout() {
                       alert(`Orden creada para pago en sitio.\nID: ${orderId}`);
                     }}
                   />
-                  <button
-                    onClick={createOrderFromCart}
-                    className="mt-4 w-full bg-[#6d4c41] hover:bg-[#4e342e] text-[#efebe9] font-semibold py-3 rounded-full shadow transition"
-                  >
-                    Registrar Pedido sin PayPal
-                  </button>
                 </div>
               </div>
             </div>

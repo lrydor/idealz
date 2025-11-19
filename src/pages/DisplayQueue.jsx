@@ -21,17 +21,69 @@ export default function DisplayQueue() {
       .channel("orders-queue")
       .on("postgres_changes",
         { event: "*", schema: "public", table: "orders" },
-        (payload) => {
+        async (payload) => {
           const row = payload.new ?? payload.old;
           const visible = VISIBLE.includes(row.status);
+
+          // Si es un UPDATE, recargar los datos completos de la orden para obtener order_items y asegurar sincronización
+          if (payload.eventType === "UPDATE") {
+            // Verificar si la orden es visible antes o después del cambio
+            const wasVisible = VISIBLE.includes(payload.old?.status);
+            const isVisible = visible;
+            
+            // Si cambió la visibilidad o es visible, recargar datos completos
+            if (isVisible || wasVisible) {
+              const { data: fullOrder } = await supabase
+                .from("orders")
+                .select("id, status, total, created_at, table_number, payment_method, order_items(name, quantity)")
+                .eq("id", row.id)
+                .single();
+
+              if (fullOrder) {
+                const shouldBeVisible = VISIBLE.includes(fullOrder.status);
+
+                setOrders((prev) => {
+                  let next = [...prev];
+                  const i = next.findIndex((o) => o.id === fullOrder.id);
+                  if (i >= 0) {
+                    // Solo actualizar si el estado recibido es válido y visible
+                    if (shouldBeVisible) {
+                      next[i] = fullOrder;
+                    } else {
+                      // Si el estado ya no es visible, remover la orden
+                      next.splice(i, 1);
+                    }
+                  } else if (shouldBeVisible) {
+                    // Agregar la orden si no existe y es visible
+                    next = [...next, fullOrder];
+                  }
+                  next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                  return next;
+                });
+                return;
+              }
+            }
+          }
+
           setOrders((prev) => {
             let next = [...prev];
             if (payload.eventType === "INSERT") {
               if (visible) next = [...prev, row].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
             } else if (payload.eventType === "UPDATE") {
               const i = next.findIndex(o => o.id === row.id);
-              if (i >= 0) { visible ? next[i] = { ...next[i], ...row } : next.splice(i,1); }
-              else if (visible) next = [...next, row];
+              if (i >= 0) {
+                if (visible) {
+                  // Actualizar completamente la orden para mantener el estado
+                  next[i] = { ...next[i], ...row };
+                  // Reordenar por fecha
+                  next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                } else {
+                  next.splice(i, 1);
+                }
+              } else if (visible) {
+                next = [...next, row];
+                next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+              }
             } else if (payload.eventType === "DELETE") {
               next = next.filter(o => o.id !== row.id);
             }

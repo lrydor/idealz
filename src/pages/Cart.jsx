@@ -196,12 +196,6 @@ export default function Cart() {
                 >
                   Proceder al Pago →
                 </a>
-                <button
-                  onClick={createOrderFromCart}
-                  className="ml-3 inline-block bg-[#4e342e] hover:bg-[#3e2723] text-[#efebe9] font-semibold px-8 py-3 rounded-full shadow-lg transition"
-                >
-                  Confirmar Pedido sin Pago
-                </button>
               </div>
             </div>
           )}
