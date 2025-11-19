@@ -38,13 +38,11 @@ export default function DisplayKitchen() {
 
           // Si es un UPDATE, recargar los datos completos de la orden para obtener order_items y asegurar sincronización
           if (payload.eventType === "UPDATE") {
-            // Verificar si la orden es visible antes o después del cambio
             const wasVisible = VISIBLE.includes(payload.old?.status) && 
                               payload.old?.payment_method === "PAGO_LOCAL" && 
                               payload.old?.table_number !== null;
             const isVisible = visible;
             
-            // Si cambió la visibilidad o es visible, recargar datos completos
             if (isVisible || wasVisible) {
               const { data: fullOrder } = await supabase
                 .from("orders")
@@ -63,15 +61,12 @@ export default function DisplayKitchen() {
                   let next = [...prev];
                   const i = next.findIndex((o) => o.id === fullOrder.id);
                   if (i >= 0) {
-                    // Solo actualizar si el estado recibido es válido y visible
                     if (shouldBeVisible) {
                       next[i] = fullOrder;
                     } else {
-                      // Si el estado ya no es visible, remover la orden
                       next.splice(i, 1);
                     }
                   } else if (shouldBeVisible) {
-                    // Agregar la orden si no existe y es visible
                     next = [...next, fullOrder];
                   }
                   next.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -207,7 +202,6 @@ export default function DisplayKitchen() {
         console.log("Estado verificado en BD:", verifyOrder.status, "Esperado:", next);
         if (verifyOrder.status !== next) {
           console.error(" El estado NO se guardó correctamente! Esperado:", next, "Actual:", verifyOrder.status);
-          // Revertir si no coincide - esto indica que la actualización no funcionó
           setOrders((curr) =>
             curr.map((o) => (o.id === order.id ? { ...o, status: verifyOrder.status } : o))
           );
@@ -231,7 +225,6 @@ export default function DisplayKitchen() {
     return "bg-[#4e342e] hover:bg-[#3e2723] text-white";
   };
 
-  // Función para limpiar la pantalla de órdenes LISTO
   const clearReadyScreen = async () => {
     const readyOrders = orders.filter((o) => o.status === "LISTO");
     
@@ -239,18 +232,15 @@ export default function DisplayKitchen() {
       return;
     }
 
-    // Actualizar todas las órdenes LISTO a ENTREGADO
     const orderIds = readyOrders.map((o) => o.id);
     
     for (const orderId of orderIds) {
-      // Intentar con función RPC si existe
       const { error: rpcError } = await supabase.rpc("update_order_status", {
         p_order_id: orderId,
         p_new_status: "ENTREGADO"
       });
 
       if (rpcError) {
-        // Si la función RPC no existe, usar update directo
         await supabase
           .from("orders")
           .update({ status: "ENTREGADO" })
@@ -258,7 +248,6 @@ export default function DisplayKitchen() {
       }
     }
 
-    // Recargar los datos
     await load();
   };
 
