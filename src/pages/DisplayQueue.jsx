@@ -108,19 +108,15 @@ export default function DisplayQueue() {
               {orders.filter(o => o.status === state).map(o => (
                 <li key={o.id} className="rounded-xl border p-3">
                   <div className="flex justify-between items-center">
-                    <div className="text-sm text-[#6d4c41]">
-                      {Number(o.total).toFixed(2)} GTQ
-                    </div>
-                    <div className="flex gap-2 items-center">
-                      {o.table_number && (
-                        <span className="text-xs px-2 py-1 rounded-full bg-[#d7ccc8] text-[#3e2723]">
-                          Mesa {o.table_number}
-                        </span>
-                      )}
-                      <span className="text-xs px-2 py-1 rounded-full bg-[#efebe9] border">
-                        {o.payment_method === "PAGO_LOCAL" ? " Local" : "💳 PayPal"}
+                    {o.table_number && (
+                      <span className="text-xs px-2 py-1 rounded-full bg-[#d7ccc8] text-[#3e2723]">
+                        Mesa {o.table_number}
                       </span>
-                    </div>
+                    )}
+                    {!o.table_number && <div></div>}
+                    <span className="text-xs px-2 py-1 rounded-full bg-[#efebe9] border">
+                      {o.payment_method === "PAGO_LOCAL" ? " Local" : "💳 PayPal"}
+                    </span>
                   </div>
                   <ul className="text-[#3e2723] mt-1">
                     {(o.order_items ?? []).map((it, i) => (
