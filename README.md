@@ -1,12 +1,23 @@
-# React + Vite
+# Pasadita web (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Branch: this is your working branch (dorran_main). Changes here won’t affect `comedor_main` until you merge/push them.
 
-Currently, two official plugins are available:
+## Chatbot (OpenAI)
+- A floating "Asistente Pasadita" widget now lives on every page (bottom-right). It uses the OpenAI SDK in-browser to keep the prototype simple.
+- Env var needed: `VITE_OPENAI_API_KEY=sk-...` (only for local testing). Don’t commit/share the real key; for production, proxy the request through your backend instead of exposing the key to the browser.
+- Model: `gpt-4o-mini`, prompt tuned for Pasadita (menú, horarios, pedidos, reservas, pagos). Temperature 0.6, short replies.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Running locally
+```bash
+npm install
+npm run dev
+```
+Add your Supabase env vars as you already have, and include `VITE_OPENAI_API_KEY` before testing the chat.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Resetting to match comedor_main later
+If you ever need to realign this branch with `origin/comedor_main`, checkout this branch and run:
+```bash
+git fetch origin
+git reset --hard origin/comedor_main
+```
+Then rebuild your changes on top.

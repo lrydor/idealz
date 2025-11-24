@@ -18,6 +18,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Orders from "./pages/Orders";
 import DisplayKitchen from "./pages/DisplayKitchen";
 import DisplayQueue from "./pages/DisplayQueue";
+import ChatWidget from "./components/ChatWidget";
 import "./App.css";
 
 function AppWrapper() {
@@ -106,10 +107,11 @@ function AppRoutes() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f5f5f5] to-[#ede7e3]">
+    <div className="relative min-h-screen bg-gradient-to-br from-[#f5f5f5] to-[#ede7e3]">
       <Router>
         <AppWrapper />
       </Router>
+      <ChatWidget />
     </div>
   );
 }
