@@ -65,42 +65,10 @@ function AppRoutes() {
       />
       <Route path="/updatePassword" element={<UpdatePassword />} />
       {/* <Route path="/display" element={<Display />} /> */}
-      <Route
-        path="/displaykitchen"
-        element={
-          <ProtectedRoute
-            allowedRoles={["admin"]}
-            element={<DisplayKitchen />}
-          />
-        }
-      />
-      <Route
-        path="/display/kitchen"
-        element={
-          <ProtectedRoute
-            allowedRoles={["admin"]}
-            element={<DisplayKitchen />}
-          />
-        }
-      />
-      <Route
-        path="/displayqueue"
-        element={
-          <ProtectedRoute
-            allowedRoles={["admin"]}
-            element={<DisplayQueue />}
-          />
-        }
-      />
-      <Route
-        path="/display/queue"
-        element={
-          <ProtectedRoute
-            allowedRoles={["admin"]}
-            element={<DisplayQueue />}
-          />
-        }
-      />
+      <Route path="/displaykitchen" element={<DisplayKitchen />} />
+      <Route path="/display/kitchen" element={<DisplayKitchen />} />
+      <Route path="/displayqueue" element={<DisplayQueue />} />
+      <Route path="/display/queue" element={<DisplayQueue />} />
     </Routes>
   );
 }

@@ -8,12 +8,11 @@ import cartLogo from "../assets/cart.svg";
 export default function Navbar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, role, profile, signOut } = useAuth();
+  const { user, role, profile } = useAuth();
   const userName = profile?.first_name ?? null;
 
   const handleLogout = async () => {
-    // Usar el método signOut del contexto que maneja todo
-    await signOut();
+    await supabase.auth.signOut();
     navigate("/");
   };
 
